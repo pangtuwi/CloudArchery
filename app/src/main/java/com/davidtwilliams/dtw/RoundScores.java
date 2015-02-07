@@ -64,7 +64,7 @@ public class RoundScores extends Activity {
     TextView arrowTextView;
 
     Resources res;
-    int orange_1;
+//    int orange_1;
 
 
     View.OnClickListener myClickListener = new View.OnClickListener() {
@@ -76,10 +76,9 @@ public class RoundScores extends Activity {
                 return;
             };
 
-            //v.setBackgroundColor(orange_1);  //set new selected row to red
-
+            alRows.get(currentEnd).setBackgroundColor(Color.WHITE);
             currentEnd = v.getId()-100;  //save ID of new selected row for next time.
-            alRows.get(currentEnd).setBackgroundColor(Color.LTGRAY);  //change remembered row to light Grey
+            alRows.get(currentEnd).setBackgroundColor(res.getColor(R.color.orange_1));
 
             Intent detailIntent = new Intent(v.getContext(), EditScores.class);
             detailIntent.putExtra("currentEnd", currentEnd);
@@ -137,11 +136,7 @@ public class RoundScores extends Activity {
                             endTotal = 0;
                             JSONArray arrowsArr = endsArr.getJSONArray(i);
 
-                            Log.d("MCCArchers", "Setting color : row is "+i+", current end is "+currentEnd);
-                            if(i==currentEnd)  {
-                                alRows.get(i).setBackgroundColor(orange_1);
-                                Log.d("MCCArchers", "Setting color : SUCCESS");
-                            }
+
 
 
                             for (int j=0; j < arrowsArr.length(); j++) {
@@ -178,6 +173,9 @@ public class RoundScores extends Activity {
                             endTextView.setText(""+endTotal);
                             TextView totalTextView = (TextView) findViewById(600+i);
                             totalTextView.setText(""+grandTotal);
+
+                            alRows.get(currentEnd).setBackgroundColor(res.getColor(R.color.orange_1));
+
                         }
 
                         TextView grandTotalTextView = (TextView) findViewById(R.id.round_total);
@@ -347,15 +345,16 @@ public class RoundScores extends Activity {
 
             alRows.get(j).setOnClickListener(myClickListener);
 
-            if(j==currentEnd)  {
-                alRows.get(j).setBackgroundColor(orange_1);
-                Log.d("MCCArchers", "Setting initial color in onCreate : SUCCESS");
-            }
-
-            // finally add this to the table row
+            //add this to the table row
             tl.addView(alRows.get(j), new TableLayout.LayoutParams(
                     TableLayout.LayoutParams.MATCH_PARENT,
                     TableLayout.LayoutParams.WRAP_CONTENT));
+
+            //if(j==currentEnd)  {
+                //alRows.get(j).setBackgroundColor(Color.LTGRAY);
+                alRows.get(currentEnd).setBackgroundColor(res.getColor(R.color.orange_1));
+              //  Log.d("MCCArchers", "Setting initial color in onCreate : SUCCESS");
+           // }
         }
 
         // Enable the "Up" button for more navigation options
@@ -374,7 +373,7 @@ public class RoundScores extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent returnData) {
         super.onActivityResult(requestCode, resultCode, returnData);
         Toast.makeText(this, "saved...", Toast.LENGTH_SHORT).show();
-        Log.e("MCCArchers", "In onActivityResult (request/result...("+requestCode+ "/ "+resultCode+") should match ("+REQUEST_CODE+"/"+RESULT_OK+")");
+        //Log.d("MCCArchers", "In onActivityResult (request/result...("+requestCode+ "/ "+resultCode+") should match ("+REQUEST_CODE+"/"+RESULT_OK+")");
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
 
             //Get info from intent

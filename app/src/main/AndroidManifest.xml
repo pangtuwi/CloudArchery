@@ -25,6 +25,7 @@
         <activity
             android:name=".RoundScores"
             android:label="@string/text_round_scores"
+            android:launchMode="singleTop"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
             <meta-data

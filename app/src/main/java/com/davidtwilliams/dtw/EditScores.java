@@ -37,6 +37,7 @@ public class EditScores extends Activity {
     String userID;
     int roundIDInt;
     int currentArrow;
+    int thisArrow;
     int currentEnd;
     int endTotal = 0;
     int grandTotal = 0;
@@ -52,16 +53,14 @@ public class EditScores extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (savedInstanceState == null) {
-            Log.d("MCCArchers", "onCreate does not have a savedInstanceState");
-        }
+        Log.d("MCCArchers", "Running EditScores.onCreate");
 
         // Tell the activity which XML layout is right
         setContentView(R.layout.edit_scores);
         //Toast.makeText(getApplicationContext(), "Loading Data", Toast.LENGTH_LONG).show();
         int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 40, getResources().getDisplayMetrics());
 
+        //Get the data for the Activity from the Intent
         String arrowsArrJSONString = this.getIntent().getExtras().getString("arrowsArr");
         currentEnd = this.getIntent().getExtras().getInt("currentEnd");
         currentArrow = this.getIntent().getExtras().getInt("currentArrow");
@@ -69,44 +68,36 @@ public class EditScores extends Activity {
         roundID = this.getIntent().getExtras().getString("roundID");
         roundIDInt = this.getIntent().getExtras().getInt("roundIDInt");
         grandTotal = this.getIntent().getExtras().getInt("grandTotal");
-        Log.d("MCCArchers", "currentEnd arrived in EditScores.java as "+currentEnd);
+        //Log.d("MCCArchers", "currentEnd arrived in EditScores.java as "+currentEnd);
 
-
+        //Convert JSON String to an Array
         try {
             arrowsArr = new JSONArray(arrowsArrJSONString);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        //Set basic information in the header (verbose for debug)
-       // HeaderText = (TextView) findViewById(R.id.end_scores_text);
-        //HeaderText.setText(arrowsArrJSONString);
-
-        //create table programatically
-        TableLayout tl = (TableLayout) findViewById(R.id.edit_score_table);
-
-        //Create Array Lists for the Textviews
-        final TextView alEndTotal = new TextView(this);
-
-        //Block format for Arrow scores
+        //Create a Block format style for Arrow scores
         final GradientDrawable gd = new GradientDrawable();
         gd.setColor(Color.WHITE);
         gd.setCornerRadius(7);
         gd.setStroke(2, 0xFF000000);
 
-        //format for selected arrow
+        //.. and a format for selected arrow
         final GradientDrawable gdSelected = new GradientDrawable();
         gdSelected.setColor(Color.WHITE);
         gdSelected.setCornerRadius(4);
         gdSelected.setStroke(6, 0xFF000000);
 
-
-        //Block format for End Totals
+        //... and a Block format for End Totals
         GradientDrawable gdTotal = new GradientDrawable();
         gdTotal.setColor(Color.LTGRAY);
         gdTotal.setCornerRadius(7);
         gdTotal.setStroke(4, 0xFF000000);
 
+        //create table in code (not in res file)
+        TableLayout tl = (TableLayout) findViewById(R.id.edit_score_table);
+        final TextView alEndTotal = new TextView(this);
         TableRow alRow = new TableRow(this);
 
         alRow.setId(100);
@@ -119,8 +110,6 @@ public class EditScores extends Activity {
         int orange_1 = res.getColor(R.color.orange_1);
         alRow.setBackgroundColor(orange_1);
 
-        //ArrayList<TextView> alArrows = new ArrayList<TextView>();
-
         for (int i = 0; i < nArrows; i++) {
             alArrows.add(new TextView(this));
 
@@ -128,14 +117,14 @@ public class EditScores extends Activity {
             alArrows.get(i).setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
             alArrows.get(i).setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             alArrows.get(i).setBackground(gd);
-            //alArrows.get(i).setText(""+j+","+i); Debugging
+
             try {
-                currentArrow = arrowsArr.getInt(i);
-                if (currentArrow == -1) {
+                thisArrow = arrowsArr.getInt(i);
+                if (thisArrow == -1) {
                     alArrows.get(i).setText("-");
                 } else {
-                    endTotal += currentArrow;
-                    alArrows.get(i).setText("" + currentArrow);
+                    endTotal += thisArrow;
+                    alArrows.get(i).setText("" + thisArrow);
                 }
             } catch (JSONException e) {
                 alArrows.get(i).setText("E");
@@ -175,9 +164,9 @@ public class EditScores extends Activity {
                     TableLayout.LayoutParams.WRAP_CONTENT));
 
         // Enable the "Up" button for more navigation options
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        //getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        currentArrow =0;
+        //currentArrow =0;
         alArrows.get(currentArrow).setBackground(gdSelected);
 
         Button button10 = (Button) findViewById(R.id.button_10);
@@ -204,6 +193,7 @@ public class EditScores extends Activity {
             }
         });  //button10 OnClickListener
 
+        //TODO There has to be a better way to do this than having 10 basically identical functions
         Button button9 = (Button) findViewById(R.id.button_9);
         button9.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -443,7 +433,7 @@ public class EditScores extends Activity {
 
                 myFirebaseRef = new Firebase(getString(R.string.firebase_url));
                 String arrowsArrJSONString = arrowsArr.toString();
-                Log.d("MCCArchers", "Save Clicked in EditScores, SAVING DATA TO DB : "+arrowsArrJSONString);
+                //Log.d("MCCArchers", "Save Clicked in EditScores, SAVING DATA TO DB : "+arrowsArrJSONString);
                 //Map dataMap = new HashMap();
                 //dataMap.put(""+currentEnd, "{"+arrowsArrJSONString+"}");
                 try {
@@ -451,8 +441,6 @@ public class EditScores extends Activity {
                         myFirebaseRef.child("scores/"+userID+"/" + roundID + "/data/" + currentEnd + "/" + i).setValue(arrowsArr.get(i));
                     }
                     myFirebaseRef.child("scores/"+userID+"/" + roundID + "/score/").setValue(grandTotal);
-                    //myFirebaseRef.child("rounds/" + roundIDInt + "/scores/"+userID+"/").setValue(grandTotal);
-
                     myFirebaseRef.child("rounds/" + roundIDInt + "/scores/"+userID+"/").setValue(grandTotal);
                     myFirebaseRef.child("users/"+userID+"/scores/" + roundID).setValue(grandTotal);
 
@@ -460,7 +448,7 @@ public class EditScores extends Activity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                //TODO Impliment Listener to notify if saved
+                //TODO Implement Listener to notify if saved
 
                 Intent returnIntent = new Intent();
                 arrowsArrJSONString = arrowsArr.toString();
@@ -471,7 +459,7 @@ public class EditScores extends Activity {
                 returnIntent.putExtra("userID", userID);
                 returnIntent.putExtra("roundIDInt", roundIDInt);
 
-                Log.d("MCCArchers", "currentEnd set on Editscores OnClick as "+currentEnd +" with result "+RESULT_OK);
+                //Log.d("MCCArchers", "currentEnd set on Editscores OnClick as "+currentEnd +" with result "+RESULT_OK);
 
                 setResult(RESULT_OK, returnIntent);
                 finish();
@@ -479,8 +467,16 @@ public class EditScores extends Activity {
         });  //buttonSave OnClickListener
     } //OnCreate
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d("MCCArchers", "Running EditScores.onStart");
+    } //onStart
+
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
+        // I think this is no longer required - fixed issue by setting launchmode = singletop in AndroidManifest.xml
         Log.d("MCCArchers", "Key up = " + keyCode);
         if(keyCode == KeyEvent.KEYCODE_PAGE_UP){
             return true;
