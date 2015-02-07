@@ -1,0 +1,23 @@
+<!-- Defines the menu item that will appear on the Action Bar in MainActivity -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Share item
+    <item
+        android:id="@+id/menu_item_share"
+        android:showAsAction="ifRoom"
+        android:title="Share"
+        android:actionProviderClass= "android.widget.ShareActionProvider"
+    /> -->
+
+
+    <item android:id="@+id/action_create_round"
+        android:icon="@drawable/ic_create_round"
+        android:title="@string/create_round"
+        android:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_change_user"
+        android:icon="@drawable/ic_change_user"
+        android:title="@string/change_user"
+        android:showAsAction="ifRoom" />
+
+
+</menu>

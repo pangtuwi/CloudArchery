@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="blue_1">#33B5E5</color>
+    <color name="grey_1">#888888</color>
+    <color name="grey_2">#DDDDDD</color>
+    <color name="orange_1">#FFBB33</color>
+    <color name="orange_2">#FF8800</color>
+
+    <!--
+    Material Design Colors  Blue, purple green orange red
+    33B5E5
+    AA66CC
+    99CC00
+    FFBB33
+    FF4444
+    0099CC
+    9933CC
+    669900
+    FF8800
+    CC0000-->
+
+</resources>

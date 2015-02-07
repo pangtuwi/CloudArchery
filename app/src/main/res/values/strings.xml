@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MCC Archers</string>
+    <string name="hint">Type something, anything...</string>
+    <string name="action_settings">Settings</string>
+    <string name="button">Update The TextView</string>
+    <string name="text_round_scores">Round Scores</string>
+    <string name="change_user">Change User</string>
+    <string name="create_round">Create Round</string>
+    <string name="firebase_url">https://vivid-torch-6393.firebaseio.com/</string>
+
+    <string-array name="end_arrow_options">
+        <item>3</item>
+        <item>6</item>
+    </string-array>
+
+    <string-array name="round_type_options">
+        <item>Brae (5x6, 40cm, 20yds)</item>
+        <item>Portsmouth (10x6, 60cm, 20yds)</item>
+    </string-array>
+ </resources>
+
