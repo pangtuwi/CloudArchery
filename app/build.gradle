@@ -8,8 +8,6 @@ android {
         applicationId "com.davidtwilliams.dtw"
         minSdkVersion 19
         targetSdkVersion 20
-        versionCode 1
-        versionName "1.0"
     }
     buildTypes {
         release {

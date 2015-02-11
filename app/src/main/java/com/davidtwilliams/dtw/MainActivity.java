@@ -209,7 +209,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                         try {
                             myFirebaseRef.child("scores/"+myUserID+"/" + roundID).setValue(myScoreData);
                             myFirebaseRef.child("scores/"+myUserID+"/" + roundID+"/score").setValue(0);
-                            myFirebaseRef.child("rounds2/"+roundIDInt+"/scores/"+myUserID).setValue(0);
+                            myFirebaseRef.child("rounds/"+roundIDInt+"/scores/"+myUserID).setValue(0);
                             myFirebaseRef.child("users/"+myUserID+"/scores/"+roundID).setValue(0);
                         } catch(Throwable t) {
                             t.printStackTrace();
@@ -264,8 +264,11 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
                 try {
                     String myJSONString = snapshot.getValue().toString();
-                    Log.d("MCCArchers", myJSONString); //Debugging
+                    //Log.d("MCCArchers", myJSONString); //Debugging
                     JSONArray myArray = new JSONArray(myJSONString);
+
+                    //Collections.reverse(Arrays.asList(myArray));  //Tried unsuccessfully to use this to reverse the order of array - did not work
+
                     mJSONAdapter.updateData(myArray);
                 } catch (Throwable t) {
                     Log.e("MCCArchers", "Could not parse malformed JSON ");
