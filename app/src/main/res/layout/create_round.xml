@@ -25,139 +25,141 @@
     <!-- Arrows / Ends -->
 
 
-    <TabHost
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/tabHost">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <TabWidget
+            android:id="@android:id/tabs"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"></TabWidget>
 
-            <TabWidget
-                android:id="@android:id/tabs"
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <LinearLayout
+                android:id="@+id/Online"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"></TabWidget>
+                android:layout_height="fill_parent"
+                android:orientation="vertical">
 
-            <FrameLayout
-                android:id="@android:id/tabcontent"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Round Type (description)"
+                    android:id="@+id/textViewRoundType"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:textSize="15dp" />
 
-                <LinearLayout
-                    android:id="@+id/Online"
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:ems="10"
+                    android:id="@+id/editTextRoundType"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date"
+                    android:id="@+id/textViewDate"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="15dp"
+                    android:textSize="15dp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:ems="10"
+                    android:id="@+id/editTextDate"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ends / Arrows per end"
+                    android:id="@+id/textViewArrows"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="15dp"
+                    android:textSize="15dp" />
+
+                <TableLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Round Type (description)"
-                        android:id="@+id/textViewRoundType"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginLeft="20dp"
-                        android:textSize="15dp" />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:ems="10"
-                        android:id="@+id/editTextRoundType"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Date"
-                        android:id="@+id/textViewDate"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="20dp"
-                        android:textSize="15dp" />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="date"
-                        android:ems="10"
-                        android:id="@+id/editTextDate"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Ends / Arrows per end"
-                        android:id="@+id/textViewArrows"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="20dp"
-                        android:textSize="15dp" />
-
-                    <TableLayout
+                    <TableRow
                         android:layout_width="fill_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="fill_parent">
 
-                        <TableRow
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent">
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:ems="10"
+                            android:id="@+id/editTextEnds"
+                            android:layout_marginLeft="20dp"
+                           />
 
-                            <EditText
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:inputType="number"
-                                android:ems="10"
-                                android:id="@+id/editTextEnds"
-                                android:layout_marginLeft="20dp"
-                               />
+                        <Spinner
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/spinnerArrows"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:textSize="20dp"
+                            android:spinnerMode="dropdown" />
 
-                            <Spinner
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/spinnerArrows"
-                                android:layout_gravity="center_horizontal"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"
-                                android:textSize="20dp"
-                                android:spinnerMode="dropdown" />
+                    </TableRow>
 
-                        </TableRow>
+                </TableLayout>
 
-                    </TableLayout>
-
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Create Shared Round Online"
-                        android:id="@+id/buttonCreateOnline"
-                        android:layout_gravity="center_horizontal"
-                        android:textSize="16dp"
-                        android:layout_marginTop="20dp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/Offline"
+                <RadioGroup
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="15dp">
 
-                    <Button
+                    <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Create Offline Round"
-                        android:id="@+id/buttonCreateLocal"
-                        android:layout_gravity="center_horizontal"
-                        android:textSize="16dp"
-                        android:layout_marginTop="20dp" />
+                        android:text="On Device"
+                        android:id="@+id/radioButtonDevice" />
 
-                    </LinearLayout>
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Online"
+                        android:id="@+id/radioButtonOnline" />
+                </RadioGroup>
 
-            </FrameLayout>
-        </LinearLayout>
-    </TabHost>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Create Round"
+                    android:id="@+id/buttonCreateRound"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="16dp"
+                    android:layout_marginTop="30dp" />
+            </LinearLayout>
+
+
+
+        </FrameLayout>
+    </LinearLayout>
+
+
 
 
 </LinearLayout>

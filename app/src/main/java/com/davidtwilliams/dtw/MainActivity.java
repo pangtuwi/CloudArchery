@@ -261,7 +261,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         myFirebaseRef.child("rounds").addValueEventListener(new ValueEventListener() {
 
             @Override public void onDataChange(DataSnapshot snapshot) {
-
+                //todo check why loads even if cant log in
                 try {
                     String myJSONString = snapshot.getValue().toString();
                     //Log.d("MCCArchers", myJSONString); //Debugging
