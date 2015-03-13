@@ -178,7 +178,7 @@
                 android:layout_marginRight="2dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
-                style="@style/button_text"/>
+                style="@style/button_text_black" />
             <Button
                 android:background="@drawable/arrow_button_white"
                 android:layout_width="fill_parent"
@@ -189,7 +189,7 @@
                 android:layout_marginRight="2dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
-                style="@style/button_text"/>
+                style="@style/button_text_black"/>
 
         </TableRow>
 
@@ -210,7 +210,7 @@
                 android:layout_marginRight="2dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
-                style="@style/button_text"/>
+                style="@style/button_text_black"/>
 
         </TableRow>
     </TableLayout>

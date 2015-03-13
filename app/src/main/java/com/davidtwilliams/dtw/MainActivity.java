@@ -11,13 +11,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ShareActionProvider;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -28,14 +29,17 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
 public class MainActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     TextView mainTextView;
-    Button mainButton;
-    EditText mainEditText;
+  //  CheckBox checkboxConnected;
+    ImageView imageViewCloudConnected;
+    ImageView imageViewLoggedIn;
+    Switch switchOnline;
     ListView mainListView;
     JSONAdapter mJSONAdapter;
     ArrayList mNameList = new ArrayList();
@@ -51,6 +55,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
     Firebase myFirebaseRef;
 
+    boolean userIsAdmin = true;   // set this false on compile to disable the round creation option
+    //todo make userIsAdmin variable read from the database on login
     String roundID;
     int roundIDInt;
     String roundDate;
@@ -62,7 +68,12 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     String myEmail = "";
     String myPassword = "";
     String myName = "";
-    boolean loggedinOK = false;
+
+    boolean loggedin = false;
+    boolean hasusername = false;
+    boolean connected = false;
+    boolean modecloud = false;
+    //TODO Change loggedInOK to Connected+LoggedInOK
 
     int REQUEST_CODE_LOGIN = 10;
     int REQUEST_CODE_CREATE_ROUND = 20;
@@ -71,26 +82,40 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //Log.e("My App","I'm In");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Firebase.setAndroidContext(this);
         myFirebaseRef = new Firebase(getString(R.string.firebase_url));
 
+        //Activate the cloud/device switch and set a listener for it
+        switchOnline = (Switch) findViewById(R.id.switch_online);
+        switchOnline.setChecked(false);  //i.e. use device list
+        switchOnline.setEnabled(false);
+        switchOnline.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("MCCArchers", "switchOnline Clicked.");
+                if (switchOnline.isChecked()){
+                    modecloud = true;
+                    loadRoundData();
+                } else {
+                    modecloud = false;
+                    loadRoundData();
+                }
+            }
+        });
+
         mainListView = (ListView) findViewById(R.id.main_listview);
         mainListView.setOnItemClickListener(this);
 
-        setModeStatus("Connecting...");
-
-        verifyLogin();
-        loadRoundData();
-
-        // 10. Create a JSONAdapter for the ListView
+        // Create a JSONAdapter for the ListView and Set the ListView to use the ArrayAdapter
         mJSONAdapter = new JSONAdapter(this, getLayoutInflater());
-
-        // Set the ListView to use the ArrayAdapter
         mainListView.setAdapter(mJSONAdapter);
+
+        //setModeStatus("Connecting...");
+
+        checkConnection();
     }
 
 
@@ -110,7 +135,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_change_user:
-                setModeStatus("OFFLINE MODE");
+                setModeStatus("");
 
                 Intent loginIntent = new Intent(this, Login.class);
                 loginIntent.putExtra("email", myEmail);
@@ -120,16 +145,20 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                 return true;
 
             case R.id.action_create_round:
-                Intent createRoundIntent = new Intent(this, CreateRound.class);
-                createRoundIntent.putExtra("email", myEmail);
-                startActivityForResult(createRoundIntent, REQUEST_CODE_CREATE_ROUND);
-                //Log.d("MCCArchers", "Finishing Create_round"); //Debugging
+                if (userIsAdmin) {
+                    Intent createRoundIntent = new Intent(this, CreateRound.class);
+                    createRoundIntent.putExtra("email", myEmail);
+                    startActivityForResult(createRoundIntent, REQUEST_CODE_CREATE_ROUND);
+                } else {
+                    Toast.makeText(getApplicationContext(), "function only available to administrators", Toast.LENGTH_LONG).show();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+   /*   Removed - sharing was part of the original tutorial used as an example to start this app
     private void setShareIntent() {
 
         if (mShareActionProvider != null) {
@@ -140,11 +169,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Android Development");
             shareIntent.putExtra(Intent.EXTRA_TEXT, mainTextView.getText());
 
-            // Make sure the provider knows
-            // it should work with that Intent
+            // Make sure the provider knows it should work with that Intent
             mShareActionProvider.setShareIntent(shareIntent);
         }
-    }
+    } */
 
     @Override
     public void onClick(View view) {
@@ -159,7 +187,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        if (!loggedinOK) {
+        if (modecloud & !loggedin) {
             Toast.makeText(getApplicationContext(), "Cannot select round, not logged in", Toast.LENGTH_LONG).show();
         } else {
             roundIDInt = position;
@@ -178,19 +206,11 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                 t. printStackTrace();
             }
             if (thisUserScore == -1 ) {
-                //Toast.makeText(getApplicationContext(), "No record found for you for this round", Toast.LENGTH_LONG).show();
                 // show a dialog to ask if a round score set should be created
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 alert.setTitle("Join Round?");
                 alert.setMessage("You have not yet joined this round. (" + roundType + ", " + roundDate +").  Do you want to join and create a scoresheet?");
-
-                // Create EditText for entry
-                //final EditText input = new EditText(this);
-                //alert.setView(input);
-
-                // Make an "OK" button to save the name
                 alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
                     public void onClick(DialogInterface dialog, int whichButton) {
                         //Array roundArray = new Array();
                         int[][] num = new int[roundEnds][roundArrowsPerEnd];
@@ -199,153 +219,206 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                                 num[i][j]=-1;
                             }
                         }
-
                         ScoreData myScoreData  = new ScoreData(roundEnds, roundArrowsPerEnd, num);
-                        //Firebase usersRef = ref.child("users");
+                        if (modecloud) {  //create data in cloud database
+                            try {
+                                myFirebaseRef.child("scores/" + myUserID + "/" + roundID).setValue(myScoreData);
+                                myFirebaseRef.child("scores/" + myUserID + "/" + roundID + "/score").setValue(0);
+                                myFirebaseRef.child("rounds/" + roundIDInt + "/scores/" + myUserID).setValue(0);
+                                myFirebaseRef.child("users/" + myUserID + "/scores/" + roundID).setValue(0);
+                            } catch (Throwable t) {
+                                t.printStackTrace();
+                            }
+                        } else { //  !modecloud therefore create data in local database
 
-                        //Map<String, ScoreData> scores = new HashMap<String, ScoreData>();
-                        //scores.put("data", myScoreData);
-
-                        try {
-                            myFirebaseRef.child("scores/"+myUserID+"/" + roundID).setValue(myScoreData);
-                            myFirebaseRef.child("scores/"+myUserID+"/" + roundID+"/score").setValue(0);
-                            myFirebaseRef.child("rounds/"+roundIDInt+"/scores/"+myUserID).setValue(0);
-                            myFirebaseRef.child("users/"+myUserID+"/scores/"+roundID).setValue(0);
-                        } catch(Throwable t) {
-                            t.printStackTrace();
                         }
+                        startRoundScores();
+                    } //OnClick (dialog)
+                }); //OnClickListener
 
-
-                    // Grab the EditText's input
-                    //String inputName = input.getText().toString();
-
-                    // Put it into memory (don't forget to commit!)
-                    //SharedPreferences.Editor e = mSharedPreferences.edit();
-                    //e.putString(PREF_NAME, inputName);
-                    //e.commit();
-
-                    // Welcome the new user
-                    //Toast.makeText(getApplicationContext(), "Welcome, " + inputName + "!", Toast.LENGTH_LONG).show();
-                }
-            });
-
-                // Make a "Cancel" button
-                // that simply dismisses the alert
+                // Make a "Cancel" button that simply dismisses the alert
                 alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
                     public void onClick(DialogInterface dialog, int whichButton) {}
                 });
-
                 alert.show();
             } else {
-
-
-
-                // create an Intent to take you over to a new DetailActivity
-                Intent detailIntent = new Intent(this, RoundScores.class);
-
-                // pack away the data about the cover into your Intent before you head out
-                detailIntent.putExtra("roundDate", roundDate);
-                detailIntent.putExtra("roundType", roundType);
-                detailIntent.putExtra("roundID", roundID);
-                detailIntent.putExtra("userID", myUserID);
-                detailIntent.putExtra("roundIDInt", roundIDInt);
-
-                // start the next Activity using your prepared Intent
-                startActivity(detailIntent);
+                startRoundScores();
             }
         }
     }// OnItemClick
 
+    public void startRoundScores () {
+        Intent detailIntent = new Intent(this, RoundScores.class);
+        detailIntent.putExtra("roundDate", roundDate);
+        detailIntent.putExtra("roundType", roundType);
+        detailIntent.putExtra("roundID", roundID);
+        detailIntent.putExtra("userID", myUserID);
+        detailIntent.putExtra("roundIDInt", roundIDInt);
+        startActivity(detailIntent);
+    }// startRoundScores
+
     public void loadRoundData() {
-        myFirebaseRef.child("rounds").addValueEventListener(new ValueEventListener() {
 
-            @Override public void onDataChange(DataSnapshot snapshot) {
-                //todo check why loads even if cant log in
-                try {
-                    String myJSONString = snapshot.getValue().toString();
-                    //Log.d("MCCArchers", myJSONString); //Debugging
-                    JSONArray myArray = new JSONArray(myJSONString);
+        if (connected & loggedin & modecloud) {
 
-                    //Collections.reverse(Arrays.asList(myArray));  //Tried unsuccessfully to use this to reverse the order of array - did not work
+            myFirebaseRef.child("rounds").addValueEventListener(new ValueEventListener() {
 
-                    mJSONAdapter.updateData(myArray);
-                } catch (Throwable t) {
-                    Log.e("MCCArchers", "Could not parse malformed JSON ");
-                    t. printStackTrace();
-                }
-            } //onDataChange
-
-            @Override public void onCancelled(FirebaseError error) { }
-
-        }); //addValueEventListener
-    } //loadRoundData
-
-    public void verifyLogin() {
-        // Access the device's key-value storage
-        mSharedPreferences = getSharedPreferences(PREFS, MODE_PRIVATE);
-        myEmail = mSharedPreferences.getString(PREF_EMAIL, "");
-        myPassword = mSharedPreferences.getString(PREF_PASSWORD, "");
-        Log.d("MCCArchers", "SharedPreferences Loaded: PREF_EMAIL: "+myEmail+"  PREF_PASSWORD:"+myPassword);
-        //if values exist in sharedPreferences, then check if match in online database
-        if ((myPassword.length() > 0) & (myEmail.length() >0 )) {
-
-            myFirebaseRef.child("users/").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
-                    Log.d("MCCArchers", "Checking Database for login values");
-                    loggedinOK = false;
-                    Map<String, Object> dbUsers = (HashMap<String, Object>)snapshot.getValue();
+                    //todo check why loads even if cant log in
                     try {
-                        for(String key: dbUsers.keySet()){
-                            //System.out.println(key  +" :: "+ dbUsers.get(key));
-                            Map<String, String> dbThisUser = (HashMap<String, String>)dbUsers.get(key);
-                            String thisEmail = dbThisUser.get("email");
-                            String thisPassword = dbThisUser.get("password");
-                            String thisUserID = dbThisUser.get("id");
-                            String thisName = dbThisUser.get("name");
-                            if (thisEmail != null) Log.e("MCCArchers", "checking "+thisEmail+ " against "+myEmail);
-                            if (myEmail.equals(thisEmail) & (myPassword.equals(thisPassword))){
-                                if (thisUserID !=null) myUserID = thisUserID;
-                                if (thisName !=null) myName = thisName;
-                                loggedinOK = true;
-                                mainTextView.setText("Available Rounds : " + myName);
-                                Toast.makeText(getApplicationContext(), "Login successful " + myName, Toast.LENGTH_LONG).show();
-                            }
-                        }  // iterate over Hashmap
-                        if (!loggedinOK) {
-                            Log.d("MCCArchers", "could not match username and password - running login Activity");
-                            Toast.makeText(getApplicationContext(), "Login unsuccessful", Toast.LENGTH_LONG).show();
-                            mainTextView = (TextView) findViewById(R.id.main_textview);
-                            mainTextView.setText("OFFLINE MODE");
-
-
-                            /* old - used to run login page directly if auto login unsuccessful - now go to offline mode
-                            Intent loginIntent = new Intent(getApplicationContext(), Login.class);
-
-                            startActivityForResult(loginIntent, REQUEST_CODE);
-                            */
-                        }
+                        Log.d("MCCArchers ", "Reading all cloud Rounds..");
+                        String myJSONString = snapshot.getValue().toString();
+                        //Log.d("MCCArchers ", myJSONString);
+                        JSONArray myArray = new JSONArray(myJSONString);
+                        //Collections.reverse(Arrays.asList(myArray));  //Tried unsuccessfully to use this to reverse the order of array - did not work
+                        mJSONAdapter.updateData(myArray);
                     } catch (Throwable t) {
-                        t. printStackTrace();
-                        Log.e("MCCArchers", "Error checking database for Login Credentials ");
+                        Log.e("MCCArchers", "Could not parse malformed JSON ");
+                        t.printStackTrace();
                     }
                 } //onDataChange
 
                 @Override
                 public void onCancelled(FirebaseError error) {
                 }
+
             }); //addValueEventListener
-
         } else {
-            // do not have email and password in savedpreferences, go to Login page to establish new credentials
-            Log.d("MCCArchers", "no credentials in savedpreferences - running login Activity");
-            setModeStatus("OFFLINE : no email and password set");
-            /*Intent loginIntent = new Intent(this, Login.class);
-            startActivityForResult(loginIntent, REQUEST_CODE);*/
-
+            Log.d ("MCCArchers", "load local rounds.......");
+            String stringJSONLocalRounds = "";
+            try {
+                SQLiteLocal db = new SQLiteLocal(this);
+                Log.d("MCCArchers ", "Reading all Local Rounds..");
+                List<LocalRound> localRounds = db.getAllLocalRounds();
+                stringJSONLocalRounds = localRounds.toString();
+                Log.d("MCCArchers ", stringJSONLocalRounds);
+                JSONArray myLocalArray = new JSONArray(stringJSONLocalRounds);
+                Log.d("MCCArchers ", "JSON Parse OK");
+                mJSONAdapter.updateData(myLocalArray);
+            } catch (Throwable t) {
+                t.printStackTrace();
+                Log.e("MCCArchers", "Could not parse JSON for local round data ");
+            }
         }
-    } //displaywelcome
+    } //loadRoundData
+
+    public void checkConnection() {
+        setModeStatus("checking cloud database connection");
+        try {
+            //Firebase connectedRef = new Firebase(R.string.firebase_url + ".info/connected");
+            myFirebaseRef.child(".info/connected").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    imageViewCloudConnected = (ImageView) findViewById(R.id.imageViewCloudConnected);
+                    boolean isConnectedCheck = snapshot.getValue(Boolean.class);
+                    if (isConnectedCheck) {
+                        connected = true;
+                        setModeStatus("cloud database connected");
+                        imageViewCloudConnected.setImageResource(R.drawable.ic_cloud_connected);
+                        switchOnline.setEnabled(true);
+                        verifyLogin();
+
+                    } else {
+                        connected = false;
+                        setModeStatus("cloud database NOT connected");
+                        imageViewCloudConnected.setImageResource(R.drawable.ic_cloud_disconnected);
+                        switchOnline.setChecked(false);
+                        loadRoundData();
+                        switchOnline.setEnabled(false);
+                    }
+                }
+
+                @Override
+                public void onCancelled(FirebaseError error) {
+                    //System.err.println("Listener was cancelled");
+                    setModeStatus("Firebase Connection Error");
+                }
+
+            });
+        } catch (Throwable t) {
+            t.printStackTrace();
+            Log.e("MCCArchers", "Exception while checking connection ");
+        }
+
+
+    }//checkConnection
+
+    public void getUserName(){
+        myFirebaseRef.child("users/").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                //Log.d("MCCArchers", "Checking Database for login values");
+                //loggedin = false;
+                Map<String, Object> dbUsers = (HashMap<String, Object>) snapshot.getValue();
+                try {
+                    for (String key : dbUsers.keySet()) {
+                        //System.out.println(key  +" :: "+ dbUsers.get(key));
+                        Map<String, String> dbThisUser = (HashMap<String, String>) dbUsers.get(key);
+                        String thisEmail = dbThisUser.get("email");
+                        //String thisPassword = dbThisUser.get("password");
+                        String thisUserID = dbThisUser.get("id");
+                        String thisName = dbThisUser.get("name");
+
+                        if ((thisEmail != null) & (thisName != null) & (thisUserID !=null)) {
+                            Log.e("MCCArchers", "checking " + thisEmail + " against " + myEmail);
+                            if (myEmail.equals(thisEmail)) {// & (myPassword.equals(thisPassword))) {
+                                if (thisUserID != null) myUserID = thisUserID;
+                                if (thisName != null) myName = thisName;
+                                Toast.makeText(getApplicationContext(), "Welcome " + myName, Toast.LENGTH_LONG).show();
+                                setModeStatus("user :"+ myName);
+                                Log.d("MCCArchers", "User with ID "+myUserID+" selected");
+
+                                loadRoundData();
+                            }
+                        }
+                    }
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                    Log.e("MCCArchers", "Error checking database for userName to match login email ");
+                }
+            } //onDataChange
+
+            @Override
+            public void onCancelled(FirebaseError error) {
+            }
+        }); //addValueEventListener
+
+    };   //getUserName
+
+    public void verifyLogin() {
+        //String firebase_email = getString(R.string.firebase_login_email);
+        //String firebase_password = getString(R.string.firebase_login_password);
+        //checkboxConnected = (CheckBox) findViewById(R.id.checkBoxConnected);
+
+        // Access the device's key-value storage
+        mSharedPreferences = getSharedPreferences(PREFS, MODE_PRIVATE);
+        myEmail = mSharedPreferences.getString(PREF_EMAIL, "");
+        myPassword = mSharedPreferences.getString(PREF_PASSWORD, "");
+
+        imageViewLoggedIn = (ImageView) findViewById(R.id.imageViewLoggedIn);
+        myFirebaseRef.authWithPassword(myEmail, myPassword, new Firebase.AuthResultHandler() {
+            @Override
+            public void onAuthenticated(AuthData authData) {
+                loggedin = true;
+                setModeStatus("user logged in");
+                imageViewLoggedIn.setImageResource(R.drawable.ic_login_ok);
+                switchOnline.setEnabled(true);
+                getUserName();
+                //checkboxConnected.setChecked(true);
+            }
+
+            @Override
+            public void onAuthenticationError(FirebaseError firebaseError) {
+                loggedin = false;
+                setModeStatus("user credentials incorrect");
+                imageViewLoggedIn.setImageResource(R.drawable.ic_change_user);
+                switchOnline.setEnabled(false);
+                //checkboxConnected.setChecked(false);
+            }
+        });
+
+    } //verifyLogin
 
     private void setModeStatus(String modeStatus) {
         mainTextView = (TextView) findViewById(R.id.main_textview);
@@ -354,23 +427,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     }//SetModeStatus
 
     private String createJSONRoundScores () {
-    /*    {
-            data: [
-            [-1,-1,-1,-1,-1,-1],
-            [-1,-1,-1,-1,-1,-1],
-            [-1,-1,-1,-1,-1,-1],
-            [-1,-1,-1,-1,-1,-1],
-            [-1,-1,-1,-1,-1,-1],
-            [-1,-1,-1,-1,-1,-1],
-            [-1,-1,-1,-1,-1,-1],
-            [-1,-1,-1,-1,-1,-1],
-            [-1,-1,-1,-1,-1,-1],
-            [-1,-1,-1,-1,-1,-1],
-            ],
-
-            score: 0
-        }
-*/        String JSONString = "{\"data\":[";
+        String JSONString = "{\"data\":[";
         for (int i=0; i<roundEnds; i++){
             String s = "[";
             for (int j=0; j < roundArrowsPerEnd; j++){
@@ -395,7 +452,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         Log.d("MCCArchers", "Running onActivityResult on return from Login :"+resultCode+"  "+requestCode);
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_LOGIN) {
             //Try logging in again with new credentials
-            Log.d("MCCArchers", "validating new login credentials :");
+            //Log.d("MCCArchers", "validating new login credentials :");
+            setModeStatus("verifying login");
             verifyLogin();
         } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CREATE_ROUND) {
             //Show local rounds

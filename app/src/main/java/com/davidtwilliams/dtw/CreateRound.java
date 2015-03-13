@@ -30,6 +30,10 @@ import java.util.Map;
 
 public class CreateRound extends Activity  {
 
+    String inputRoundType;
+    String inputDate;
+    String inputEnds;
+    String inputArrowsPerEnd;
     int inputEndsInt = 0;
     int inputArrowsPerEndInt = 0;
     Firebase myFirebaseRef;
@@ -47,16 +51,25 @@ public class CreateRound extends Activity  {
     public void saveToDevice (String newRoundType, String newDate, int newEnds, int newArrowsPerEnd) {
         SQLiteLocal db = new SQLiteLocal(this);
 
+        //TODO: Get the new Round Variables from the Activity interface
+        int newRoundTypeID = 0;
+        String newRoundDescriptor = "";
+        int newCurrentEnd = 0;
+        int newCurrentArrow = 0;
+        int newArrowCount = 0;
+        String newArrowData = "";
+
         Log.d("MCCArchers", "Inserting into DB ..");
-        db.addLocalRound(new LocalRound(newRoundType, newDate, newEnds, newArrowsPerEnd));
+        db.addLocalRound(new LocalRound(newRoundTypeID, newRoundType, newRoundDescriptor, newDate,
+                        newEnds, newArrowsPerEnd, newCurrentEnd, newCurrentArrow, newArrowCount,
+                        newArrowData));
 
         // Reading all entries
         Log.d("MCCArchers ", "Reading all Local Rounds..");
         List<LocalRound> localRounds = db.getAllLocalRounds();
 
         for (LocalRound lr : localRounds) {
-            String log = "LocalRound = Id: "+lr.getId()+" ,roundtype: " + lr.getRoundtype() + " ,Date: " + lr.getDate();
-            // Writing Contacts to log
+            String log = "LocalRound = Id: "+lr.getId()+" ,roundtype: " + lr.getRoundType() + " ,Date: " + lr.getDate();
             Log.d("MCCArchers", log);
         }
 
@@ -76,30 +89,22 @@ public class CreateRound extends Activity  {
                         Integer nextRoundID =nextRoundIndex +1;
                         String newRoundId = "round"+nextRoundID;
 
-                        Round newRound = new Round(newRoundId, newRoundType, newDate, newEnds, newArrowsPerEnd);
+                        //TODO : Load these additional variables from Database
+                        int newRoundTypeID = 0;
+                        String newRoundDescriptor = "";
+                        int newCurrentEnd = 0;
+                        int newCurrentArrow = 0;
+                        int newArrowCount = 0;
+                        String newArrowData = "";
 
-                        //User alanisawesome = new User("Alan Turing", 1912);
-                        //User gracehop = new User("Grace Hopper", 1906);
 
+                        Round newRound = new Round(newRoundId, newRoundTypeID, newRoundType, newRoundDescriptor,
+                                                    newDate, newEnds, newArrowsPerEnd, newCurrentEnd, newCurrentArrow,
+                                                    newArrowCount, newArrowData);
 
                         Map<Integer, Round> rounds = new HashMap<Integer, Round>();
                         rounds.put(nextRoundIndex, newRound);
-                        //users.put("alanisawesome", alanisawesome);
-                        //users.put("gracehop", gracehop);
 
-                        //usersRef.setValue(users);
-
-
-
-                       /* String newRoundString = "{\"date\" : \""+newDate
-                                +"\", \"id\" : \"round"+nextRoundID
-                                +"\", \"arrowsperend\" : "+newArrowsPerEnd
-                                +"\", \"roundType\" : \""+newRoundType
-                                +"\", \"ends\" : "+newEnds+"}"; does not work with JSON string?*/
-
-                        //Log.d("MCCArchers", newRoundString);
-
-                        //myFirebaseRef.child("rounds").setValue(rounds);
                         myFirebaseRef.child("rounds/"+nextRoundIndex).setValue(newRound);
                     } catch (Throwable t) {
                         t.printStackTrace();
@@ -142,16 +147,16 @@ public class CreateRound extends Activity  {
             @Override
             public void onClick(View v) {
                 EditText editTextRoundType = (EditText) findViewById(R.id.editTextRoundType);
-                String inputRoundType = editTextRoundType.getText().toString();
+                inputRoundType = editTextRoundType.getText().toString();
 
                 EditText editTextDate = (EditText) findViewById(R.id.editTextDate);
-                String inputDate = editTextDate.getText().toString();
+                inputDate = editTextDate.getText().toString();
 
                 EditText editTextEnds = (EditText) findViewById(R.id.editTextEnds);
-                String inputEnds = editTextEnds.getText().toString();
+                inputEnds = editTextEnds.getText().toString();
 
                 Spinner spinner1 = (Spinner) findViewById(R.id.spinnerArrows);
-                String inputArrowsPerEnd = String.valueOf(spinner1.getSelectedItem());
+                inputArrowsPerEnd = String.valueOf(spinner1.getSelectedItem());
 
                 try {
                     inputEndsInt = Integer.parseInt(inputEnds);

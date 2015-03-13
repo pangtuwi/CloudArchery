@@ -14,6 +14,10 @@ import android.widget.EditText;
 public class Login extends Activity {
 
     SharedPreferences mSharedPreferences;
+
+    String myEmail = "";
+    String myPassword = "";
+
     private static final String PREFS = "prefs";
     private static final String PREF_EMAIL = "email";
     private static final String PREF_PASSWORD = "password";
@@ -26,6 +30,13 @@ public class Login extends Activity {
         setContentView(R.layout.login);
 
         mSharedPreferences = getSharedPreferences(PREFS, MODE_PRIVATE);
+        myEmail = mSharedPreferences.getString(PREF_EMAIL, "");
+        myPassword = mSharedPreferences.getString(PREF_PASSWORD, "");
+
+        EditText editTextEmail = (EditText) findViewById(R.id.editTextEmail);
+        editTextEmail.setText(myEmail);
+        EditText editTextPassword = (EditText) findViewById(R.id.editTextPassword);
+        editTextPassword.setText(myPassword);
 
         Button buttonLogin = (Button) findViewById(R.id.buttonLogin);
         buttonLogin.setOnClickListener(new View.OnClickListener() {

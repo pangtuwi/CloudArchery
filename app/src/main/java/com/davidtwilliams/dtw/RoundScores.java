@@ -83,6 +83,7 @@ public class RoundScores extends Activity {
             Intent detailIntent = new Intent(v.getContext(), EditScores.class);
             detailIntent.putExtra("currentEnd", currentEnd);
             detailIntent.putExtra("currentArrow", currentArrow);
+            detailIntent.putExtra("arrowCount", arrowCount);
             detailIntent.putExtra("roundID", roundID);
             detailIntent.putExtra("userID", userID);
             detailIntent.putExtra("roundIDInt", roundIDInt);
@@ -123,21 +124,18 @@ public class RoundScores extends Activity {
                         try {
                             roundScores = new JSONObject(myJSONString);
                         } catch (Throwable t) {
-                            Log.d("roundScores = new JSONObject(myJSONString)", myJSONString);
+                            Log.d("MCCArchers", "myJSONString="+myJSONString);
                         }
                         try {
                             endsArr = roundScores.getJSONArray("data");
                         } catch (Throwable t) {
-                            Log.d("endsArr = roundScores.getJSONArray(\"data\");", myJSONString);
+                            Log.d("MCCArchers", "myJSONString="+myJSONString);
                         }
 
                         for (int i=0; i < endsArr.length(); i++) {
 
                             endTotal = 0;
                             JSONArray arrowsArr = endsArr.getJSONArray(i);
-
-
-
 
                             for (int j=0; j < arrowsArr.length(); j++) {
                                 //Log.d("doing arrow: "+i+", "+j, "top");
@@ -233,10 +231,11 @@ public class RoundScores extends Activity {
             userID = this.getIntent().getExtras().getString("userID");
             currentEnd = this.getIntent().getExtras().getInt("currentEnd");
             currentArrow = this.getIntent().getExtras().getInt("currentArrow");
+            arrowCount = this.getIntent().getExtras().getInt("arrowCount");
             roundIDInt = this.getIntent().getExtras().getInt("roundIDInt");
             roundDate = this.getIntent().getExtras().getString("roundDate");
             roundType = this.getIntent().getExtras().getString("roundType");
-            Log.d("MCCArchers", "RoundScores OnCreate... CurrentEnd retrieved from Intent as "+currentEnd);
+            //Log.d("MCCArchers", "RoundScores OnCreate... CurrentEnd retrieved from Intent as "+currentEnd);
         } catch (Throwable t) {
             Log.e("MCCArchers", "No Intent data found...");
         };

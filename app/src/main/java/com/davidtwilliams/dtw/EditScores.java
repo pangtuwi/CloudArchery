@@ -15,15 +15,15 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by paulwilliams on 22/01/15.
@@ -37,6 +37,8 @@ public class EditScores extends Activity {
     String userID;
     int roundIDInt;
     int currentArrow;
+    int arrowCount;
+    float arrowAvg;
     int thisArrow;
     int currentEnd;
     int endTotal = 0;
@@ -49,6 +51,15 @@ public class EditScores extends Activity {
     TextView alEndTotal;
     GradientDrawable gd;
     GradientDrawable gdSelected;
+
+    View.OnClickListener myClickListener = new View.OnClickListener() {
+
+        public void onClick(View v) {        // v is the arrow that was clicked
+            alArrows.get(currentArrow).setBackground(gd);
+            currentArrow = v.getId()-200;
+            alArrows.get(currentArrow).setBackground(gdSelected);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +75,14 @@ public class EditScores extends Activity {
         String arrowsArrJSONString = this.getIntent().getExtras().getString("arrowsArr");
         currentEnd = this.getIntent().getExtras().getInt("currentEnd");
         currentArrow = this.getIntent().getExtras().getInt("currentArrow");
+        arrowCount = this.getIntent().getExtras().getInt("arrowCount");
         userID = this.getIntent().getExtras().getString("userID");
         roundID = this.getIntent().getExtras().getString("roundID");
         roundIDInt = this.getIntent().getExtras().getInt("roundIDInt");
         grandTotal = this.getIntent().getExtras().getInt("grandTotal");
         //Log.d("MCCArchers", "currentEnd arrived in EditScores.java as "+currentEnd);
+
+
 
         //Convert JSON String to an Array
         try {
@@ -134,6 +148,9 @@ public class EditScores extends Activity {
             alArrows.get(i).setPadding(2, 2, 5, 0);
             alArrows.get(i).setTextColor(Color.BLACK);
             alArrows.get(i).setWidth(px);
+
+            alArrows.get(i).setOnClickListener(myClickListener);
+
             alRow.addView(alArrows.get(i));
 
             TextView arrowInnerGap = new TextView(this);
@@ -168,6 +185,8 @@ public class EditScores extends Activity {
 
         //currentArrow =0;
         alArrows.get(currentArrow).setBackground(gdSelected);
+
+
 
         Button button10 = (Button) findViewById(R.id.button_10);
         button10.setOnClickListener(new View.OnClickListener() {
@@ -433,17 +452,25 @@ public class EditScores extends Activity {
 
                 myFirebaseRef = new Firebase(getString(R.string.firebase_url));
                 String arrowsArrJSONString = arrowsArr.toString();
-                //Log.d("MCCArchers", "Save Clicked in EditScores, SAVING DATA TO DB : "+arrowsArrJSONString);
-                //Map dataMap = new HashMap();
-                //dataMap.put(""+currentEnd, "{"+arrowsArrJSONString+"}");
+
+                if (arrowCount == 0) {
+                    arrowAvg = 0;
+                } else {
+                    arrowAvg = (float)grandTotal/arrowCount;
+                }
+                DecimalFormat df = new DecimalFormat("0.00");
+
                 try {
                     for (int i = 0; i < nArrows; i++) {
                         myFirebaseRef.child("scores/"+userID+"/" + roundID + "/data/" + currentEnd + "/" + i).setValue(arrowsArr.get(i));
                     }
                     myFirebaseRef.child("scores/"+userID+"/" + roundID + "/score/").setValue(grandTotal);
-                    myFirebaseRef.child("rounds/" + roundIDInt + "/scores/"+userID+"/").setValue(grandTotal);
-                    myFirebaseRef.child("users/"+userID+"/scores/" + roundID).setValue(grandTotal);
 
+                    myFirebaseRef.child("rounds/" + roundIDInt + "/scores/"+userID+"/").setValue(grandTotal);
+                    myFirebaseRef.child("rounds/" + roundIDInt + "/arrowcounts/"+userID+"/").setValue(arrowCount);
+                    myFirebaseRef.child("rounds/" + roundIDInt + "/averages/"+userID+"/").setValue(df.format(arrowAvg));
+
+                    myFirebaseRef.child("users/"+userID+"/scores/" + roundID).setValue(grandTotal);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -455,6 +482,7 @@ public class EditScores extends Activity {
                 returnIntent.putExtra("arrowsArr", arrowsArrJSONString);
                 returnIntent.putExtra("currentEnd", currentEnd);
                 returnIntent.putExtra("currentArrow", currentArrow);
+                returnIntent.putExtra("arrowCount", arrowCount);
                 returnIntent.putExtra("roundID", roundID);
                 returnIntent.putExtra("userID", userID);
                 returnIntent.putExtra("roundIDInt", roundIDInt);
@@ -490,15 +518,11 @@ public class EditScores extends Activity {
     {
         super.onBackPressed();
        // Log.d("MCCArchers", "Running onBackPressed in EditScores");
-        //finish();
-
     }
 
     @Override
     public void finish() {
         super.finish();
-
-
     }
 
     @Override

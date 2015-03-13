@@ -6,65 +6,133 @@ package com.davidtwilliams.dtw;
 public class LocalRound {
 
     private int id;
-    private String roundtype;
+    private int roundTypeID;
+    private String roundType;
+    private String roundDescriptor;
     private String date;
     private int ends;
-    private int arrowsperend;
+    private int arrowsPerEnd;
+    private int currentEnd;
+    private int currentArrow;
+    private int arrowCount;
+    private String arrowData;
 
     public LocalRound(){}
 
-    public LocalRound(String roundtype, String date, int ends, int arrowsperend) {
+    public LocalRound(int roundTypeID, String roundType, String roundDescriptor, String date, int ends, int arrowsPerEnd,
+                      int currentEnd, int currentArrow, int arrowCount, String arrowData) {
         super();
-        this.roundtype = roundtype;
+        //this.id = id; Used in Round (OnlineVersion)
+        this.roundTypeID = roundTypeID;
+        this.roundType = roundType;
+        this.roundDescriptor = roundDescriptor;
         this.date = date;
         this.ends = ends;
-        this.arrowsperend = arrowsperend;
+        this.arrowsPerEnd = arrowsPerEnd;
+        this.currentEnd = currentEnd;
+        this.currentArrow = currentArrow;
+        this.arrowCount = arrowCount;
+        this.arrowData = arrowData;
     }
 
-    //getters & setters
 
     @Override
-    public String toString() {
-        return "Round [id=" + id + ", Round Type:" + roundtype + ", " + date +  "("+ends+"x"+arrowsperend+")]";
+
+    public String toString(){
+        return "{\"id\":"+id + ", \"roundType\":\""+roundType + "\", \"date\":\"" + date +"\"} ";
     }
+
+    //getters
 
     public int getId() {
         return id;
+    }
+
+    public int getRoundTypeID() {
+        return roundTypeID;
+    }
+
+    public String getRoundType() {
+        return roundType;
+    }
+
+    public String getRoundDescriptor() {
+        return roundDescriptor;
     }
 
     public String getDate() {
         return date;
     }
 
-    public String getRoundtype() {
-        return roundtype;
-    }
-    
     public int getEnds() {
         return ends;
     }
-    
-    public int getArrowsperend() {
-        return arrowsperend;
+
+    public int getArrowsPerEnd() {
+        return arrowsPerEnd;
     }
+
+    public int getCurrentEnd() {
+        return currentEnd;
+    }
+
+    public int getCurrentArrow() {
+        return currentArrow;
+    }
+
+    public int getArrowCount() {
+        return arrowCount;
+    }
+
+    public String getArrowData() {
+        return arrowData;
+    }
+
+    //& setters
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setRoundTypeID(int roundTypeID) {
+        this.roundTypeID = roundTypeID;
+    }
+
+    public void setRoundType(String roundType) {
+        this.roundType = roundType;
+    }
+
+    public void setRoundDescriptor(String roundDescriptor) {
+        this.roundDescriptor = roundDescriptor;
     }
 
     public void setDate(String date) {
         this.date = date;
     }
 
-    public void setRoundtype(String roundtype) {
-        this.roundtype = roundtype;
-    }
-
     public void setEnds(int ends) {
         this.ends = ends;
     }
 
-    public void setArrowsperend(int arrowsperend) {
-        this.arrowsperend = arrowsperend;
+    public void setArrowsPerEnd(int arrowsPerEnd) {
+        this.arrowsPerEnd = arrowsPerEnd;
+    }
+
+    public void setCurrentEnd(int currentEnd) {
+        this.currentEnd = currentEnd;
+    }
+
+    public void setCurrentArrow(int curentArrow) {
+        this.currentArrow = curentArrow;
+    }
+
+    public void setArrowCount(int arrowCount) {
+        this.arrowCount = arrowCount;
+    }
+
+    public void setArrowData(String arrowData) {
+        this.arrowData = arrowData;
     }
 }
+
+

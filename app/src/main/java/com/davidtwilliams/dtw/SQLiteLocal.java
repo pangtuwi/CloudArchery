@@ -17,21 +17,30 @@ import java.util.List;
 public class SQLiteLocal  extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "LocalRounds";
 
     // Books table name
     private static final String TABLE_ROUNDS = "rounds";
-    private static final String TABLE_DATA = "data";
 
     // ROUNDS Table Columns names
     private static final String KEY_ID = "id";
+    private static final String KEY_ROUNDTYPEID = "roundtypeid";
     private static final String KEY_ROUNDTYPE = "roundtype";
+    private static final String KEY_ROUNDDESCRIPTOR = "rounddescriptor";
     private static final String KEY_DATE = "date";
     private static final String KEY_ENDS = "ends";
     private static final String KEY_ARROWSPEREND = "arrowsperend";
+    private static final String KEY_CURRENTEND = "currentend";
+    private static final String KEY_CURRENTARROW = "currentarrow";
+    private static final String KEY_ARROWCOUNT = "arrowcount";
+    private static final String KEY_ARROWDATA = "arrowdata";
 
-    private static final String[] COLUMNS = {KEY_ID,KEY_ROUNDTYPE,KEY_DATE,KEY_ENDS,KEY_ARROWSPEREND};
+
+    private static final String[] COLUMNS = {KEY_ID,KEY_ROUNDTYPEID, KEY_ROUNDTYPE, KEY_ROUNDDESCRIPTOR,
+                                            KEY_DATE,KEY_ENDS,KEY_ARROWSPEREND,
+                                            KEY_CURRENTEND, KEY_CURRENTARROW, KEY_ARROWCOUNT, KEY_ARROWDATA};
+
 
     public SQLiteLocal(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -39,34 +48,29 @@ public class SQLiteLocal  extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // SQL statement to create book table
+
         String CREATE_ROUNDS_TABLE = "CREATE TABLE rounds ( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "roundtypeid INT, "+
                 "roundtype TEXT, "+
+                "rounddescriptor TEXT, "+
+                "date TEXT, "+
                 "ends INT, "+
                 "arrowsperend INT, "+
-                "date TEXT )";
-
-        String CREATE_ARROWS_TABLE = "CREATE TABLE data ( " +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "roundid INT, "+
-                "endid INT, "+
-                "arrowid INT, "+
-                "score INT )";
-
-
-        // create books table
+                "currentend INT, "+
+                "currentarrow INT, "+
+                "arrowcount INT, "+
+                "arrowdata TEXT)";
+        //TODO : incorporate RoundTypeIDs into cloud version
+        //TODO : incorporate RoundTypeIDs into interface
         db.execSQL(CREATE_ROUNDS_TABLE);
-        db.execSQL(CREATE_ARROWS_TABLE);
-
-    }
+    } //OnCreate
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS rounds");
-        db.execSQL("DROP TABLE IF EXISTS arrows");
-
+        //ToDO Allow user to save data as JSON before dropping
         // create fresh tables
         this.onCreate(db);
     } //onUpgrade
@@ -80,16 +84,22 @@ public class SQLiteLocal  extends SQLiteOpenHelper {
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put(KEY_ROUNDTYPE, round.getRoundtype());
+        values.put(KEY_ROUNDTYPEID, round.getRoundTypeID());
+        values.put(KEY_ROUNDTYPE, round.getRoundType());
+        values.put(KEY_ROUNDDESCRIPTOR, round.getRoundDescriptor());
         values.put(KEY_DATE, round.getDate());
         values.put(KEY_ENDS, round.getEnds());
-        values.put(KEY_ARROWSPEREND, round.getArrowsperend());
+        values.put(KEY_ARROWSPEREND, round.getArrowsPerEnd());
+        values.put(KEY_CURRENTEND, round.getCurrentEnd());
+        values.put(KEY_CURRENTARROW, round.getCurrentArrow());
+        values.put(KEY_ARROWCOUNT, round.getArrowCount());
+        values.put(KEY_ARROWDATA, round.getArrowData());
 
         // 3. insert
         db.insert(TABLE_ROUNDS, // table
                 null, //nullColumnHack
                 values); // key/value -> keys = column names/ values = column values
-
+        //TODO What is a nullColumnHAck
         // 4. close
         db.close();
     } //addRound
@@ -115,18 +125,20 @@ public class SQLiteLocal  extends SQLiteOpenHelper {
         if (cursor != null)
             cursor.moveToFirst();
 
-        // 4. build book object
+        // 4. build object
         LocalRound localRound = new LocalRound();
         localRound.setId(Integer.parseInt(cursor.getString(0)));
-        localRound.setRoundtype(cursor.getString(1));
-        localRound.setDate(cursor.getString(2));
-        localRound.setEnds(cursor.getInt(3));
-        localRound.setArrowsperend(cursor.getInt(4));
+        localRound.setRoundTypeID(Integer.parseInt(cursor.getString(1)));
+        localRound.setRoundType(cursor.getString(2));
+        localRound.setRoundDescriptor(cursor.getString(3));
+        localRound.setDate(cursor.getString(4));
+        localRound.setEnds(cursor.getInt(5));
+        localRound.setArrowsPerEnd(cursor.getInt(6));
+        localRound.setCurrentEnd(cursor.getInt(7));
+        localRound.setCurrentArrow(cursor.getInt(8));
+        localRound.setArrowCount(cursor.getInt(9));
+        localRound.setArrowData(cursor.getString(10));
 
-        //log
-        Log.d("MCCArchers", "get Round(" + id + ")" + localRound.toString());
-
-        // 5. return book
         return localRound;
     } //getLocalRound
 
@@ -140,25 +152,26 @@ public class SQLiteLocal  extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
-        // 3. go over each row, build book and add it to list
+        // 3. go over each row and add it to list
         LocalRound localRound = null;
         if (cursor.moveToFirst()) {
             do {
                 localRound = new LocalRound();
                 localRound.setId(Integer.parseInt(cursor.getString(0)));
-                localRound.setRoundtype(cursor.getString(1));
-                localRound.setDate(cursor.getString(2));
-                localRound.setEnds(cursor.getInt(3));
-                localRound.setArrowsperend(cursor.getInt(4));
+                localRound.setRoundTypeID(Integer.parseInt(cursor.getString(1)));
+                localRound.setRoundType(cursor.getString(2));
+                localRound.setRoundDescriptor(cursor.getString(3));
+                localRound.setDate(cursor.getString(4));
+                localRound.setEnds(cursor.getInt(5));
+                localRound.setArrowsPerEnd(cursor.getInt(6));
+                localRound.setCurrentEnd(cursor.getInt(7));
+                localRound.setCurrentArrow(cursor.getInt(8));
+                localRound.setArrowCount(cursor.getInt(9));
+                localRound.setArrowData(cursor.getString(10));
 
-                // Add book to books
                 localRounds.add(localRound);
             } while (cursor.moveToNext());
         }
-
-        Log.d("MCCArchers","get All Rounds: "+localRounds.toString());
-
-        // return books
         return localRounds;
     } //getAllLocalRounds
 
@@ -169,10 +182,16 @@ public class SQLiteLocal  extends SQLiteOpenHelper {
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put("roundtype", localRound.getRoundtype());
+        values.put("roundtypeid", localRound.getRoundTypeID());
+        values.put("roundtype", localRound.getRoundType());
+        values.put("rounddescriptor", localRound.getRoundDescriptor());
         values.put("date", localRound.getDate());
         values.put("ends", localRound.getEnds());
-        values.put("arrowsperend", localRound.getArrowsperend());
+        values.put("arrowsperend", localRound.getArrowsPerEnd());
+        values.put("currentend", localRound.getCurrentEnd());
+        values.put("currentarrow", localRound.getCurrentArrow());
+        values.put("arrowcount", localRound.getArrowCount());
+        values.put("arrowdata", localRound.getArrowData());
 
         // 3. updating row
         int i = db.update(TABLE_ROUNDS, //table
@@ -203,6 +222,6 @@ public class SQLiteLocal  extends SQLiteOpenHelper {
         //log
         Log.d("MCCArchers", "delete localRound: "+ localRound.toString());
 
-    }
+    } //deleteLocalRound
 }
 
