@@ -58,11 +58,15 @@ public class CreateRound extends Activity  {
         int newCurrentArrow = 0;
         int newArrowCount = 0;
         String newArrowData = "";
+        String newRoundCloudID = "";
+        int newroundTotal = 0;
+        boolean newRoundComplete = false;
+        long newUpdateAt = 0;
 
         Log.d("MCCArchers", "Inserting into DB ..");
-        db.addLocalRound(new LocalRound(newRoundTypeID, newRoundType, newRoundDescriptor, newDate,
+        /*db.addLocalRound(new LocalRound(newRoundCloudID, newRoundTypeID, newRoundType, newRoundDescriptor, newDate,
                         newEnds, newArrowsPerEnd, newCurrentEnd, newCurrentArrow, newArrowCount,
-                        newArrowData));
+                        newroundTotal, newRoundComplete, newUpdateAt, newArrowData));
 
         // Reading all entries
         Log.d("MCCArchers ", "Reading all Local Rounds..");
@@ -71,13 +75,13 @@ public class CreateRound extends Activity  {
         for (LocalRound lr : localRounds) {
             String log = "LocalRound = Id: "+lr.getId()+" ,roundtype: " + lr.getRoundType() + " ,Date: " + lr.getDate();
             Log.d("MCCArchers", log);
-        }
+        } */
 
     } //saveToDb
 
     public void saveToOnlineDb (final String newRoundType, final String newDate, final int newEnds, final int newArrowsPerEnd) {
         Log.d("MCCArchers", "Inserting into OnlineDB ..");
-        myFirebaseRef = new Firebase(getString(R.string.firebase_url));
+        myFirebaseRef = new Firebase(getString(R.string.firebase_club_url));
         myFirebaseRef.child("rounds").addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override

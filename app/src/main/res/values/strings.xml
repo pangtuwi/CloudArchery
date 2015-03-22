@@ -9,7 +9,8 @@
     <string name="text_round_scores">Round Scores</string>
     <string name="change_user">Change User</string>
     <string name="create_round">Create Round</string>
-    <string name="firebase_url">https://vivid-torch-6393.firebaseio.com/</string>
+    <string name="firebase_club_url">https://cadevclub.firebaseio.com/</string>
+    <!--<string name="firebase_url">https://vivid-torch-6393.firebaseio.com/</string>-->
     <!--<string name="firebase_login_email">pangtuwi@gmail.com</string>
     <string name="firebase_login_password">z3F34GlsW</string>-->
     <!--<string name="firebase_url">https://mccarchers.firebaseio.com/</string>-->

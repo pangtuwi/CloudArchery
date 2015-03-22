@@ -21,6 +21,7 @@ import com.firebase.client.Firebase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -33,10 +34,12 @@ public class EditScores extends Activity {
     int nArrows = 6;
     TextView HeaderText;
     JSONArray arrowsArr;
+    JSONObject scoresJSON;
     String roundID;
     String userID;
     int roundIDInt;
     int currentArrow;
+    int initialCurrentEnd;
     int arrowCount;
     float arrowAvg;
     int thisArrow;
@@ -72,21 +75,32 @@ public class EditScores extends Activity {
         int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 40, getResources().getDisplayMetrics());
 
         //Get the data for the Activity from the Intent
-        String arrowsArrJSONString = this.getIntent().getExtras().getString("arrowsArr");
-        currentEnd = this.getIntent().getExtras().getInt("currentEnd");
-        currentArrow = this.getIntent().getExtras().getInt("currentArrow");
-        arrowCount = this.getIntent().getExtras().getInt("arrowCount");
+        //String arrowsArrJSONString = this.getIntent().getExtras().getString("arrowsArr");
+        String scoreJSONString = this.getIntent().getExtras().getString("scoresJSON");
+
+        //currentEnd = this.getIntent().getExtras().getInt("currentEnd");
+        //currentArrow = this.getIntent().getExtras().getInt("currentArrow");
+        //arrowCount = this.getIntent().getExtras().getInt("arrowCount");
         userID = this.getIntent().getExtras().getString("userID");
         roundID = this.getIntent().getExtras().getString("roundID");
-        roundIDInt = this.getIntent().getExtras().getInt("roundIDInt");
-        grandTotal = this.getIntent().getExtras().getInt("grandTotal");
+        //roundIDInt = this.getIntent().getExtras().getInt("roundIDInt");
+        //grandTotal = this.getIntent().getExtras().getInt("grandTotal");
         //Log.d("MCCArchers", "currentEnd arrived in EditScores.java as "+currentEnd);
 
-
+//userid is null?
 
         //Convert JSON String to an Array
         try {
-            arrowsArr = new JSONArray(arrowsArrJSONString);
+            scoresJSON = new JSONObject(scoreJSONString);
+            //arrowsArr = new JSONArray(arrowsArrJSONString);
+            //arrowsArr = new JSONArray(scoresJSON.getJSONArray("data"));
+
+            JSONArray dataArrJSON = scoresJSON.getJSONArray("data");
+            JSONObject statusObjJSON = scoresJSON.getJSONObject("status");
+            currentEnd = statusObjJSON.getInt("currentEnd");
+            initialCurrentEnd = currentEnd;
+            currentArrow = statusObjJSON.getInt("currentArrow");
+            arrowsArr = dataArrJSON.getJSONArray(currentEnd);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -206,7 +220,7 @@ public class EditScores extends Activity {
                     e.printStackTrace();
                 }
                 currentArrow++;
-                if (currentArrow == nArrows) {currentArrow = 0;}
+                if (currentArrow == nArrows) {currentArrow = 0; currentEnd = initialCurrentEnd+1;}
                 alArrows.get(currentArrow).setBackground(gdSelected);
                 alEndTotal.setText(""+endTotal);
             }
@@ -231,7 +245,7 @@ public class EditScores extends Activity {
                     e.printStackTrace();
                 }
                 currentArrow++;
-                if (currentArrow == nArrows) {currentArrow = 0;}
+                if (currentArrow == nArrows) {currentArrow = 0; currentEnd = initialCurrentEnd+1;}
                 alArrows.get(currentArrow).setBackground(gdSelected);
                 alEndTotal.setText(""+endTotal);
             }
@@ -255,7 +269,7 @@ public class EditScores extends Activity {
                     e.printStackTrace();
                 }
                 currentArrow++;
-                if (currentArrow == nArrows) {currentArrow = 0;}
+                if (currentArrow == nArrows) {currentArrow = 0; currentEnd = initialCurrentEnd+1;}
                 alArrows.get(currentArrow).setBackground(gdSelected);
                 alEndTotal.setText(""+endTotal);
             }
@@ -279,7 +293,7 @@ public class EditScores extends Activity {
                     e.printStackTrace();
                 }
                 currentArrow++;
-                if (currentArrow == nArrows) {currentArrow = 0;}
+                if (currentArrow == nArrows) {currentArrow = 0; currentEnd = initialCurrentEnd+1;}
                 alArrows.get(currentArrow).setBackground(gdSelected);
                 alEndTotal.setText(""+endTotal);
             }
@@ -303,7 +317,7 @@ public class EditScores extends Activity {
                     e.printStackTrace();
                 }
                 currentArrow++;
-                if (currentArrow == nArrows) {currentArrow = 0;}
+                if (currentArrow == nArrows) {currentArrow = 0; currentEnd = initialCurrentEnd+1;}
                 alArrows.get(currentArrow).setBackground(gdSelected);
                 alEndTotal.setText(""+endTotal);
             }
@@ -326,7 +340,7 @@ public class EditScores extends Activity {
                     e.printStackTrace();
                 }
                 currentArrow++;
-                if (currentArrow == nArrows) {currentArrow = 0;}
+                if (currentArrow == nArrows) {currentArrow = 0; currentEnd = initialCurrentEnd+1;}
                 alArrows.get(currentArrow).setBackground(gdSelected);
                 alEndTotal.setText(""+endTotal);
             }
@@ -349,7 +363,7 @@ public class EditScores extends Activity {
                     e.printStackTrace();
                 }
                 currentArrow++;
-                if (currentArrow == nArrows) {currentArrow = 0;}
+                if (currentArrow == nArrows) {currentArrow = 0; currentEnd = initialCurrentEnd+1;}
                 alArrows.get(currentArrow).setBackground(gdSelected);
                 alEndTotal.setText(""+endTotal);
             }
@@ -372,7 +386,7 @@ public class EditScores extends Activity {
                     e.printStackTrace();
                 }
                 currentArrow++;
-                if (currentArrow == nArrows) {currentArrow = 0;}
+                if (currentArrow == nArrows) {currentArrow = 0; currentEnd = initialCurrentEnd+1;}
                 alArrows.get(currentArrow).setBackground(gdSelected);
                 alEndTotal.setText(""+endTotal);
             }
@@ -395,7 +409,7 @@ public class EditScores extends Activity {
                     e.printStackTrace();
                 }
                 currentArrow++;
-                if (currentArrow == nArrows) {currentArrow = 0;}
+                if (currentArrow == nArrows) {currentArrow = 0; currentEnd = initialCurrentEnd+1;}
                 alArrows.get(currentArrow).setBackground(gdSelected);
                 alEndTotal.setText(""+endTotal);
             }
@@ -418,7 +432,7 @@ public class EditScores extends Activity {
                     e.printStackTrace();
                 }
                 currentArrow++;
-                if (currentArrow == nArrows) {currentArrow = 0;}
+                if (currentArrow == nArrows) {currentArrow = 0; currentEnd = initialCurrentEnd+1;}
                 alArrows.get(currentArrow).setBackground(gdSelected);
                 alEndTotal.setText(""+endTotal);
             }
@@ -439,7 +453,7 @@ public class EditScores extends Activity {
                     e.printStackTrace();
                 }
                 currentArrow++;
-                if (currentArrow == nArrows) {currentArrow = 0;}
+                if (currentArrow == nArrows) {currentArrow = 0; currentEnd = initialCurrentEnd+1;}
                 alArrows.get(currentArrow).setBackground(gdSelected);
                 alEndTotal.setText(""+endTotal);
             }
@@ -449,8 +463,31 @@ public class EditScores extends Activity {
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                try {
+                    //write status into Scores JSON Object
+                    JSONObject scoresStatusJSON = scoresJSON.getJSONObject("status");
+                    scoresStatusJSON.put("currentEnd", currentEnd);
+                    scoresStatusJSON.put("currentArrow", currentArrow);
+                    scoresJSON.put("status", scoresStatusJSON);
 
-                myFirebaseRef = new Firebase(getString(R.string.firebase_url));
+                    //write data into Scores JSON Object
+                    JSONArray scoresDataJSON = scoresJSON.getJSONArray("data");
+                    JSONArray scoresEndDataJSON = scoresDataJSON.getJSONArray(currentEnd);
+                    scoresEndDataJSON.put(arrowsArr);
+                    scoresDataJSON.put(currentEnd, scoresEndDataJSON);
+                    scoresJSON.put("data", scoresDataJSON);
+
+                    //write unix timestamp into Scores JSON Object
+                    long updatedAt = System.currentTimeMillis() / 1000L;
+                    scoresJSON.put("updatedAt", updatedAt);
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
+
+                SQLiteLocal db = new SQLiteLocal(getApplicationContext());
+                db.saveScores(roundID, scoresJSON);
+
+              /*  myFirebaseRef = new Firebase(getString(R.string.firebase_club_url));
                 String arrowsArrJSONString = arrowsArr.toString();
 
                 if (arrowCount == 0) {
@@ -475,7 +512,6 @@ public class EditScores extends Activity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                //TODO Implement Listener to notify if saved
 
                 Intent returnIntent = new Intent();
                 arrowsArrJSONString = arrowsArr.toString();
@@ -491,6 +527,7 @@ public class EditScores extends Activity {
 
                 setResult(RESULT_OK, returnIntent);
                 finish();
+                */
             }
         });  //buttonSave OnClickListener
     } //OnCreate

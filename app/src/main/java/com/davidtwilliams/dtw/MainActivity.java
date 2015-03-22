@@ -1,8 +1,6 @@
 package com.davidtwilliams.dtw;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ShareActionProvider;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,17 +26,15 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
-public class MainActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class MainActivity extends Activity implements AdapterView.OnItemClickListener {
 
     TextView mainTextView;
-  //  CheckBox checkboxConnected;
     ImageView imageViewCloudConnected;
     ImageView imageViewLoggedIn;
-    Switch switchOnline;
+    //Switch switchOnline;
     ListView mainListView;
     JSONAdapter mJSONAdapter;
     ArrayList mNameList = new ArrayList();
@@ -63,6 +58,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     String roundType;
     int roundEnds = 5;
     int roundArrowsPerEnd = 6;
+    int roundTotal = 0;
 
     String myUserID = "";
     String myEmail = "";
@@ -72,8 +68,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     boolean loggedin = false;
     boolean hasusername = false;
     boolean connected = false;
-    boolean modecloud = false;
-    //TODO Change loggedInOK to Connected+LoggedInOK
+    boolean usecloud = false;
+    //TODO : temporary usecloud variable to allow debug while creating local data store
+    //boolean modecloud = false;
+
 
     int REQUEST_CODE_LOGIN = 10;
     int REQUEST_CODE_CREATE_ROUND = 20;
@@ -86,13 +84,13 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         setContentView(R.layout.activity_main);
 
         Firebase.setAndroidContext(this);
-        myFirebaseRef = new Firebase(getString(R.string.firebase_url));
+        myFirebaseRef = new Firebase(getString(R.string.firebase_club_url));
 
         //Activate the cloud/device switch and set a listener for it
-        switchOnline = (Switch) findViewById(R.id.switch_online);
-        switchOnline.setChecked(false);  //i.e. use device list
-        switchOnline.setEnabled(false);
-        switchOnline.setOnClickListener( new View.OnClickListener() {
+        //switchOnline = (Switch) findViewById(R.id.switch_online);
+        //switchOnline.setChecked(false);  //i.e. use device list
+        //switchOnline.setEnabled(false);
+        /*switchOnline.setsickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("MCCArchers", "switchOnline Clicked.");
@@ -105,6 +103,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                 }
             }
         });
+        */
 
         mainListView = (ListView) findViewById(R.id.main_listview);
         mainListView.setOnItemClickListener(this);
@@ -112,8 +111,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         // Create a JSONAdapter for the ListView and Set the ListView to use the ArrayAdapter
         mJSONAdapter = new JSONAdapter(this, getLayoutInflater());
         mainListView.setAdapter(mJSONAdapter);
-
-        //setModeStatus("Connecting...");
 
         checkConnection();
     }
@@ -158,39 +155,46 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         }
     }
 
-   /*   Removed - sharing was part of the original tutorial used as an example to start this app
-    private void setShareIntent() {
-
-        if (mShareActionProvider != null) {
-
-            // create an Intent with the contents of the TextView
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.setType("text/plain");
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Android Development");
-            shareIntent.putExtra(Intent.EXTRA_TEXT, mainTextView.getText());
-
-            // Make sure the provider knows it should work with that Intent
-            mShareActionProvider.setShareIntent(shareIntent);
-        }
-    } */
-
-    @Override
-    public void onClick(View view) {
-        // Take what was typed into the EditText
-        // and use in TextView
-        //mainTextView.setText(mainEditText.getText().toString()
-         //       + " is learning Android development!");
-        //setShareIntent();
-    }
-
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        if (modecloud & !loggedin) {
-            Toast.makeText(getApplicationContext(), "Cannot select round, not logged in", Toast.LENGTH_LONG).show();
-        } else {
-            roundIDInt = position;
+        JSONObject scoreRoundJSON = mJSONAdapter.getItem(position);
+        Intent detailIntent = new Intent(this, RoundScores.class);
+        try {
+            String selectedRoundID = scoreRoundJSON.get("id").toString();
+            detailIntent.putExtra("roundID", selectedRoundID);
+        } catch (Throwable t) {
+            Log.e("MCCArchers", "Error getting id from JSON (MainActivity.onItemClick)");
+            t.printStackTrace();
+        }
+
+        //detailIntent.putExtra("roundDate", roundDate);
+        //detailIntent.putExtra("roundType", roundType);
+        //TODO Should only need the integer position to be able to load rest.  If not then put back and add roundDescriptor etc.
+
+
+
+        startActivity(detailIntent);
+
+            /* try {
+                roundIDInt = position;
+                /*JSONObject jsonObject = (JSONObject) mJSONAdapter.getItem(position);
+                roundDate = jsonObject.optString("date", "");
+                roundType = jsonObject.optString("roundType", "");
+                roundID = jsonObject.optString("id", "");
+                roundEnds = jsonObject.getInt("ends");
+                roundArrowsPerEnd = jsonObject.getInt("arrowsperend");
+                roundTotal = jsonObject.getInt("roundTotal");
+            } catch ( Throwable t) {
+                t. printStackTrace();
+            }
+
+            startRoundScores();
+            */
+
+
+     /*       roundIDInt = position;
             JSONObject jsonObject = (JSONObject) mJSONAdapter.getItem(position);
             roundDate = jsonObject.optString("date", "");
             roundType = jsonObject.optString("roundType", "");
@@ -204,8 +208,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             } catch ( Throwable t) {
                 thisUserScore = -1;
                 t. printStackTrace();
-            }
-            if (thisUserScore == -1 ) {
+             */
+
+            /*  DELETED AS NO LONGER NEED THIS PROCESS TO JOIN ENDS (all ends in list already joined)
+                if (thisUserScore == -1 ) {
                 // show a dialog to ask if a round score set should be created
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 alert.setTitle("Join Round?");
@@ -220,17 +226,14 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                             }
                         }
                         ScoreData myScoreData  = new ScoreData(roundEnds, roundArrowsPerEnd, num);
-                        if (modecloud) {  //create data in cloud database
-                            try {
-                                myFirebaseRef.child("scores/" + myUserID + "/" + roundID).setValue(myScoreData);
-                                myFirebaseRef.child("scores/" + myUserID + "/" + roundID + "/score").setValue(0);
-                                myFirebaseRef.child("rounds/" + roundIDInt + "/scores/" + myUserID).setValue(0);
-                                myFirebaseRef.child("users/" + myUserID + "/scores/" + roundID).setValue(0);
-                            } catch (Throwable t) {
-                                t.printStackTrace();
-                            }
-                        } else { //  !modecloud therefore create data in local database
 
+                        try {
+                            myFirebaseRef.child("scores/" + myUserID + "/" + roundID).setValue(myScoreData);
+                            myFirebaseRef.child("scores/" + myUserID + "/" + roundID + "/score").setValue(0);
+                            myFirebaseRef.child("rounds/" + roundIDInt + "/scores/" + myUserID).setValue(0);
+                            myFirebaseRef.child("users/" + myUserID + "/scores/" + roundID).setValue(0);
+                        } catch (Throwable t) {
+                            t.printStackTrace();
                         }
                         startRoundScores();
                     } //OnClick (dialog)
@@ -244,24 +247,20 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             } else {
                 startRoundScores();
             }
-        }
+            */
+
     }// OnItemClick
 
-    public void startRoundScores () {
-        Intent detailIntent = new Intent(this, RoundScores.class);
-        detailIntent.putExtra("roundDate", roundDate);
-        detailIntent.putExtra("roundType", roundType);
-        detailIntent.putExtra("roundID", roundID);
-        detailIntent.putExtra("userID", myUserID);
-        detailIntent.putExtra("roundIDInt", roundIDInt);
-        startActivity(detailIntent);
-    }// startRoundScores
 
     public void loadRoundData() {
 
-        if (connected & loggedin & modecloud) {
+        if (connected & loggedin) {
 
-            myFirebaseRef.child("rounds").addValueEventListener(new ValueEventListener() {
+            SQLiteLocal db = new SQLiteLocal(this);
+            if (myUserID != null) {db.syncFirebase(myUserID);}
+
+
+           /* myFirebaseRef.child("rounds").addValueEventListener(new ValueEventListener() {
 
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
@@ -284,17 +283,21 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                 }
 
             }); //addValueEventListener
+            */
         } else {
             Log.d ("MCCArchers", "load local rounds.......");
             String stringJSONLocalRounds = "";
             try {
                 SQLiteLocal db = new SQLiteLocal(this);
-                Log.d("MCCArchers ", "Reading all Local Rounds..");
-                List<LocalRound> localRounds = db.getAllLocalRounds();
-                stringJSONLocalRounds = localRounds.toString();
-                Log.d("MCCArchers ", stringJSONLocalRounds);
-                JSONArray myLocalArray = new JSONArray(stringJSONLocalRounds);
+                //db.syncFirebase(myUserID);
+                //Log.d("MCCArchers ", "Reading all Local Rounds..");
+                //List<LocalRound> localRounds = db.getAllLocalRounds();
+                //stringJSONLocalRounds = localRounds.toString();
+                //Log.d("MCCArchers ", stringJSONLocalRounds);
+                //JSONArray myLocalArray = new JSONArray(stringJSONLocalRounds);
+                JSONArray myLocalArray = db.getLocalRoundsJSONArray();
                 Log.d("MCCArchers ", "JSON Parse OK");
+
                 mJSONAdapter.updateData(myLocalArray);
             } catch (Throwable t) {
                 t.printStackTrace();
@@ -316,16 +319,16 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                         connected = true;
                         setModeStatus("cloud database connected");
                         imageViewCloudConnected.setImageResource(R.drawable.ic_cloud_connected);
-                        switchOnline.setEnabled(true);
+                        //switchOnline.setEnabled(true);
                         verifyLogin();
 
                     } else {
                         connected = false;
                         setModeStatus("cloud database NOT connected");
                         imageViewCloudConnected.setImageResource(R.drawable.ic_cloud_disconnected);
-                        switchOnline.setChecked(false);
+                        //switchOnline.setChecked(false);
                         loadRoundData();
-                        switchOnline.setEnabled(false);
+                        //switchOnline.setEnabled(false);
                     }
                 }
 
@@ -403,7 +406,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                 loggedin = true;
                 setModeStatus("user logged in");
                 imageViewLoggedIn.setImageResource(R.drawable.ic_login_ok);
-                switchOnline.setEnabled(true);
+                //switchOnline.setEnabled(true);
                 getUserName();
                 //checkboxConnected.setChecked(true);
             }
@@ -413,7 +416,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                 loggedin = false;
                 setModeStatus("user credentials incorrect");
                 imageViewLoggedIn.setImageResource(R.drawable.ic_change_user);
-                switchOnline.setEnabled(false);
+                //switchOnline.setEnabled(false);
                 //checkboxConnected.setChecked(false);
             }
         });
