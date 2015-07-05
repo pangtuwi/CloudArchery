@@ -1,96 +1,325 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".RoundScores">
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/round_scores_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true" />
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
 
-    <TableLayout
-        android:id="@+id/dynamic_scores_table"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_gravity="center_horizontal"
-        android:textSize="20dp">
-    </TableLayout>
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
+            android:stretchColumns="*"
+            android:textAlignment="inherit">
 
-    <TableLayout
-        android:id="@+id/summary_table"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_margin="5dp"
-        android:background="#000000"
-        android:layout_gravity="bottom">
-
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
-            <TextView
-                android:id="@+id/round_total"
-                android:layout_width="fill_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_alignParentLeft="true"
-                android:textColor="#FFFFFF"
-                android:textSize="24dp"
-                android:text="Total=0"
-                android:layout_gravity="left|top" />
-
-            <TextView
-                android:id="@+id/round_avg"
+            <!-- Section Header 1 : Round Detail -->
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_alignParentRight="true"
-                android:textColor="#FFFFFF"
-                android:textSize="24dp"
-                android:text="Average=0"
-                android:layout_gravity="right|top"
-                android:layout_height="wrap_content" />
-        </TableRow>
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp">
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+                <TextView
+                    android:id="@+id/round_scores_section_header_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Round Detail"
+                    android:textSize="18dp" />
+            </TableRow>
 
-            <TextView
-                android:id="@+id/round_ends"
-                android:layout_width="fill_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_alignParentLeft="true"
-                android:textColor="#FFFFFF"
-                android:textSize="24dp"
-                android:text="Ends=0"
-                android:layout_gravity="left|top" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/table_border">
 
-            <TextView
-                android:id="@+id/round_arrows"
-                android:layout_width="fill_parent"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_alignParentRight="true"
-                android:textColor="#FFFFFF"
-                android:textSize="24dp"
-                android:text="Arrows=0"
-                android:layout_gravity="right|top"
-                android:layout_marginRight="5dp" />
-        </TableRow>
+                <Space
+                    android:layout_width="2px"
+                    android:layout_height="2dp"
+                    android:layout_gravity="bottom|left"
+                    android:layout_marginLeft="5dp" />
+            </TableRow>
 
-    </TableLayout>
+            <!-- Section 1 : Round Detail -->
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/round_scores_round_type_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:text="Round Name"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/round_scores_round_owner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="5dp"
+                        android:text="Owner : xxxxxxxxxx"
+                        android:textSize="14dp" />
+                </LinearLayout>
 
 
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp">
+
+                <TextView
+                    android:id="@+id/round_scores_round_type_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="this is a description of the round"
+                    android:textSize="12dp" />
+            </TableRow>
+
+            <!-- Section Header 2 : My Scores -->
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/round_scores_section_header_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="My Scores"
+                    android:textSize="18dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/table_border">
+
+                <Space
+                    android:layout_width="2px"
+                    android:layout_height="2dp"
+                    android:layout_gravity="bottom|left"
+                    android:layout_marginLeft="5dp" />
+            </TableRow>
+
+            <!-- Section 2 : Dynamic Scores Table -->
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp">
+
+                <TableLayout
+                    android:id="@+id/dynamic_scores_table"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="20dp"></TableLayout>
+
+            </TableRow>
+
+            <!-- Section Header 3 : Leaderboard -->
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/round_scores_section_header_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Leaderboard"
+                    android:textSize="18dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/table_border">
+
+                <Space
+                    android:layout_width="20px"
+                    android:layout_height="2dp"
+                    android:layout_gravity="bottom|left"
+                    android:layout_marginLeft="5dp" />
+            </TableRow>
+
+            <!-- Section 3 : Leaderboard  -->
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp">
+
+                <RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/round_scores_leaderboard_header_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="2"
+                        android:text="Name"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/round_scores_leaderboard_header_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:paddingRight="10dp"
+                        android:text="Total"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/round_scores_leaderboard_header_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="260dp"
+                        android:text="Avg"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/round_scores_leaderboard_header_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="200dp"
+                        android:text="Arws"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+
+
+                </RelativeLayout>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:minHeight="400dp">
+
+                <com.cloudarchery.archersapp.ScrollDisabledListView
+                    android:id="@+id/round_scores_user_list_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </TableRow>
+
+            <!-- Section 4 : Summary
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp">
+                <TableLayout
+                    android:id="@+id/summary_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="#000000"
+                    android:layout_gravity="bottom"
+                    android:paddingBottom="10px">
+
+                    <TableRow
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                        <TextView
+                            android:id="@+id/round_total"
+                            android:layout_width="fill_parent"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_alignParentLeft="true"
+                            android:textColor="#FFFFFF"
+                            android:textSize="24dp"
+                            android:text="Total=0"
+                            android:layout_gravity="left|top" />
+
+                        <TextView
+                            android:id="@+id/round_avg"
+                            android:layout_width="match_parent"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_alignParentRight="true"
+                            android:textColor="#FFFFFF"
+                            android:textSize="24dp"
+                            android:text="Average=0"
+                            android:layout_gravity="right|top"
+                            android:layout_height="wrap_content" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                        <TextView
+                            android:id="@+id/round_ends"
+                            android:layout_width="fill_parent"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_alignParentLeft="true"
+                            android:textColor="#FFFFFF"
+                            android:textSize="24dp"
+                            android:text="Ends=0"
+                            android:layout_gravity="left|top" />
+
+                        <TextView
+                            android:id="@+id/round_arrows"
+                            android:layout_width="fill_parent"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_alignParentRight="true"
+                            android:textColor="#FFFFFF"
+                            android:textSize="24dp"
+                            android:text="Arrows=0"
+                            android:layout_gravity="right|top"
+                            android:layout_marginRight="5dp" />
+                    </TableRow>
+
+                </TableLayout>
+            </TableRow>
+    -->
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_marginLeft="5dp">
+
+                <Space
+                    android:layout_width="20px"
+                    android:layout_height="20dp"
+                    android:layout_gravity="bottom|left"
+                    android:layout_marginLeft="5dp" />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
 
 
 </LinearLayout>

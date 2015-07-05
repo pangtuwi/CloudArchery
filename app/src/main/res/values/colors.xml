@@ -1,11 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="list_item_title">#fff</color>
+    <color name="list_background">#C0C0C0</color>
+    <color name="old_list_background_pressed">#992416</color>
+    <color name="list_background_pressed">#FF9944</color>
+    <color name="list_divider">#272727</color>
+    <color name="old_counter_text_bg">#626262</color>
+    <color name="counter_text_bg">#992416</color>
+    <color name="counter_text_color">#c5c4c4</color>
+
     <color name="blue_1">#33B5E5</color>
     <color name="grey_1">#888888</color>
     <color name="grey_2">#DDDDDD</color>
     <color name="orange_1">#FFBB33</color>
     <color name="orange_2">#FF8800</color>
+
+    <color name="black_semi_transparent">#B2000000</color>
+    <color name="background">#e5e5e5</color>
+    <color name="half_black">#808080</color>
+    <color name="white">#fafafa</color>
+    <color name="white_pressed">#f1f1f1</color>
+    <color name="pink">#e91e63</color>
+    <color name="pink_pressed">#ec407a</color>
+    <color name="blue_semi_transparent">#805677fc</color>
+    <color name="blue_semi_transparent_pressed">#80738ffe</color>
 
     <!--
     Material Design Colors  Blue, purple green orange red
