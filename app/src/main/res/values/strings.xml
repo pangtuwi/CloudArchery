@@ -9,19 +9,58 @@
     <string name="text_round_scores">Round Scores</string>
     <string name="change_user">Change User</string>
     <string name="create_round">Create Round</string>
-    <string name="firebase_club_url">https://cadevclub.firebaseio.com/</string>
-    <!--<string name="firebase_url">https://vivid-torch-6393.firebaseio.com/</string>-->
-    <!--<string name="firebase_login_email">pangtuwi@gmail.com</string>
-    <string name="firebase_login_password">z3F34GlsW</string>-->
-    <!--<string name="firebase_url">https://mccarchers.firebaseio.com/</string>-->
-    <string-array name="end_arrow_options">
-        <item>3</item>
-        <item>6</item>
+    <string name="reset_prefs">Reset Prefs</string>
+
+    <string name="PREFS">prefs</string>
+    <string name="PREF_SYNC">syncon</string>
+    <string name="PREF_USERID">userid</string>
+    <string name="PREF_CLUBID">clubid</string>
+    <string name="PREF_EMAIL">email</string>
+    <string name="PREF_PASSWORD">password</string>
+    <string name="PREF_NAME">name</string>
+    <!--<string name="PREF_ISADMIN">isadmin</string>-->
+    <string name="PREF_FIRSTRUN">firstrun</string>
+    <string name="PREF_CLUBURL">cluburl</string>
+    <string name="PREF_CLUBWEBURL">clubweburl</string>
+    <string name="PREF_ROUNDTYPESUPDATEDAT">roundtypesupdatedat</string>
+    <string name="firebase_central_url">https://cadev.firebaseio.com/</string>
+    <string name="drawer_open">Slider Menu Opened</string>
+    <string name="drawer_close">Slider Menu Closed</string>
+
+
+    <!-- Nav Drawer Menu Items -->
+    <string-array name="nav_drawer_items">
+        <item >CloudArchery</item>
+        <item >Create New Round</item>
+        <item >Join Club Round</item>
+        <item >My Club</item>
+        <item >My Stats</item>
+        <item >Options</item>
     </string-array>
 
-    <string-array name="round_type_options">
-        <item>Brae (5x6, 40cm, 20yds)</item>
-        <item>Portsmouth (10x6, 60cm, 20yds)</item>
+    <string-array name="nav_drawer_page_titles">
+        <item >CloudArchery</item>
+        <item >Create New Round</item>
+        <item >Join Club Round</item>
+        <item >My Club</item>
+        <item >My Stats</item>
+        <item >Options</item>
     </string-array>
+
+
+    <!-- Nav Drawer List Item Icons -->
+    <!-- Keep them in order as the titles are in -->
+    <array name="nav_drawer_icons">
+        <item>@drawable/home_48</item>
+        <item>@drawable/add_48</item>
+        <item>@drawable/cloud_48</item>
+        <item>@drawable/people_48</item>
+        <item>@drawable/graph_48</item>
+        <item>@drawable/settings_48</item>
+    </array>
+
+    <!-- Content Description -->
+    <string name="desc_list_item_icon">Item Icon</string>
+
  </resources>
 

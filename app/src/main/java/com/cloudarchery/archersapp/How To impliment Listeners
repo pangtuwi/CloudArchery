@@ -1,0 +1,24 @@
+//http://developer.android.com/training/basics/fragments/communicating.html
+
+1. Define the interface in Object 1 (example ClubFirebase)
+
+   public interface OnUserScoreUpdatedListener {
+        public void onScoreUpdated(JSONArray newScoresJSON);
+    }
+
+2. Define an instance of the listener in Object 1 (example ClubFirebase)
+
+    OnUserScoreUpdatedListener myScoreListener;
+
+
+3. Create a new Anonomous inheritor in Object 2 (example RoundScores)
+
+        myAppState.CDS.myScoreListener = new ClubFirebase.OnUserScoreUpdatedListener() {
+            @Override
+            public void onScoreUpdated(JSONArray newScoresJSON) {
+                mJSONAdapter.updateData(newScoresJSON);
+            }
+        };
+
+4. Call it in the object method in Object 1
+myScoreListener.onScoreUpdated(usersJSONArray);

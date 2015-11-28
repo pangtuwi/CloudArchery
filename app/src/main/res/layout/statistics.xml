@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:text="STATISTICS"
+            android:id="@+id/statistics_heading_1"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:clickable="false"
+            android:textColor="@color/orange_1"
+            android:layout_marginTop="5dp" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:id="@+id/statistics_div_1"
+            android:background="@color/orange_1"
+            android:paddingLeft="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="20dp"
+                android:text="All Time Stats"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:clickable="true"
+                android:id="@+id/statistics_alltime"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="20dp"
+                android:text="toal arrows, average, etc."
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:id="@+id/statistics_alltime_2"
+                android:clickable="true"/>
+        </LinearLayout>
+        <!-- GREY DIVIDER -->
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:id="@+id/statistics_div_1_2"
+            android:background="@color/grey_2"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="20dp"
+                android:text="Graph"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:textStyle="bold"
+                android:id="@+id/statistics_graph"
+                android:clickable="true"/>
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="20dp"
+                android:text="see how my average score has improved over time"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:id="@+id/statistics_graph_2"
+                android:clickable="true"/>
+        </LinearLayout>
+
+        <!-- GREY DIVIDER -->
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:id="@+id/settings_div_1_3"
+            android:background="@color/grey_2"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
+
+</LinearLayout>
+
+
+</LinearLayout>

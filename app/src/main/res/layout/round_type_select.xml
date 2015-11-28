@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+    tools:context=".MyActivity">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:text="FILTERS"
+            android:id="@+id/roundtypeselect_heading_filters"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:clickable="false"
+            android:textColor="@color/orange_1"
+            android:layout_marginTop="5dp" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:id="@+id/myclub_div_1"
+            android:background="@color/orange_1"
+            android:paddingLeft="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GNAS"
+            android:id="@+id/roundtypeselect_checkbox_GNAS"
+            android:checked="true" />
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FITA"
+            android:id="@+id/roundtypeselect_checkbox_FITA"
+            android:checked="true" />
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Custom"
+            android:id="@+id/roundtypeselect_checkbox_custom"
+            android:checked="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Indoor"
+            android:id="@+id/roundtypeselect_checkbox_indoor"
+            android:checked="true" />
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Outdoor"
+            android:id="@+id/roundtypeselect_checkbox_outdoor"
+            android:checked="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:text="ROUND TYPES"
+            android:id="@+id/roundtypeselect_heading_roundtypes"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:clickable="false"
+            android:textColor="@color/orange_1"
+            android:layout_marginTop="5dp" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:id="@+id/myclub_div_2"
+            android:background="@color/orange_1"
+            android:paddingLeft="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
+
+    </LinearLayout>
+
+    <ListView
+        android:layout_marginLeft="5dp"
+        android:id="@+id/roundtype_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    </LinearLayout>
+

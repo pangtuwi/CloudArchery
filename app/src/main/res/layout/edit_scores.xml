@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MyActivity">
+
+    <!--<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="fill_parent"
     android:layout_height="fill_parent">
+-->
 
     <!--<TextView
         android:id="@+id/end_scores_text"
@@ -13,6 +23,15 @@
         android:layout_centerVertical="true"
      />-->
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Scoring End X of Y"
+        android:id="@+id/editscores_tv_header"
+        android:layout_marginTop="5px"
+        android:layout_marginLeft="10px"
+        android:textSize="16dp" />
+
     <TableLayout
         android:id="@+id/edit_score_table"
         android:layout_width="fill_parent"
@@ -21,31 +40,34 @@
     </TableLayout>
 
     <TableLayout
-        android:id="@+id/button_table"
+        android:id="@+id/editscores_button_table"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="#ffffff"
         android:layout_gravity="center_horizontal"
         android:layout_margin="5dp"
-        android:clickable="true">
+        android:clickable="true"
+        android:layout_marginTop="50dp">
 
         <TableRow
             android:layout_width="fill_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="2dp"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:weightSum="2"
+            android:paddingLeft="10dp">
 
             <Button
                 android:background="@drawable/arrow_button_gold"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="10"
-                android:id="@+id/button_10"
+                android:id="@+id/editscores_button_10"
                 android:layout_column="1"
-                android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
                 style="@style/button_text"
+                android:layout_gravity="center"
                 android:layout_weight="1" />
 
             <Button
@@ -53,11 +75,11 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:text="9"
-                android:id="@+id/button_9"
+                android:id="@+id/editscores_button_9"
                 android:layout_column="2"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
                 style="@style/button_text"
                 android:layout_weight="1" />
 
@@ -66,14 +88,15 @@
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_margin="2dp"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:paddingLeft="10dp">
 
             <Button
                 android:background="@drawable/arrow_button_red"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="8"
-                android:id="@+id/button_8"
+                android:id="@+id/editscores_button_8"
                 android:layout_column="1"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
@@ -85,7 +108,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="7"
-                android:id="@+id/button_7"
+                android:id="@+id/editscores_button_7"
                 android:layout_column="2"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
@@ -99,14 +122,15 @@
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_margin="2dp"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:paddingLeft="10dp">
 
             <Button
                 android:background="@drawable/arrow_button_blue"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="6"
-                android:id="@+id/button_6"
+                android:id="@+id/editscores_button_6"
                 android:layout_column="1"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
@@ -118,7 +142,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="5"
-                android:id="@+id/button_5"
+                android:id="@+id/editscores_button_5"
                 android:layout_column="2"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
@@ -132,14 +156,15 @@
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_margin="2dp"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:paddingLeft="10dp">
 
             <Button
                 android:background="@drawable/arrow_button_black"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="4"
-                android:id="@+id/button_4"
+                android:id="@+id/editscores_button_4"
                 android:layout_column="1"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
@@ -151,7 +176,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="3"
-                android:id="@+id/button_3"
+                android:id="@+id/editscores_button_3"
                 android:layout_column="2"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
@@ -165,14 +190,15 @@
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_margin="2dp"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:paddingLeft="10dp">
 
             <Button
                 android:background="@drawable/arrow_button_white"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="2"
-                android:id="@+id/button_2"
+                android:id="@+id/editscores_button_2"
                 android:layout_column="1"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
@@ -184,7 +210,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
-                android:id="@+id/button_1"
+                android:id="@+id/editscores_button_1"
                 android:layout_column="2"
                 android:layout_marginRight="2dp"
                 android:layout_gravity="center_horizontal"
@@ -192,19 +218,56 @@
                 style="@style/button_text_black"/>
 
         </TableRow>
-
+    </TableLayout>
+    <TableLayout
+        android:id="@+id/editscores_button_table_2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"
+        android:clickable="true">
+        
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_margin="2dp"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:layout_marginRight="5dp"
+            android:paddingRight="15dp"
+            android:paddingLeft="10dp">
 
             <Button
                 android:background="@drawable/arrow_button_white"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="miss"
-                android:id="@+id/button_0"
+                android:id="@+id/editscores_button_0"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                style="@style/button_text_black"
+                android:layout_column="1" />
+            <Button
+                android:background="@drawable/arrow_button_white"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="&lt;-"
+                android:id="@+id/editscores_button_delete"
+                android:layout_column="1"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                style="@style/button_text_black"/>
+
+            <Button
+                android:background="@drawable/arrow_button_white"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="clear"
+                android:id="@+id/editscores_button_clear"
                 android:layout_column="1"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
@@ -216,7 +279,7 @@
     </TableLayout>
 
     <Button
-        android:id="@+id/button_save"
+        android:id="@+id/editscores_button_save"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Save"

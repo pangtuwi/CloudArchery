@@ -1,0 +1,42 @@
+android:versionCode="7"
+android:versionName="0.2.5"
+Date Started : 2015-11-11
+Date Released  :
+Changes :
+
+
+android:versionCode="6"
+android:versionName="0.2.4"
+Date Started : 2015-09-20
+Date Released : 2015-10-11
+Changes :
+1. Solved the "Dave Burgess" bug.  Lowest average not overwritten by zero.
+2. Updated header text on Scores page to include CreatedAt date
+
+
+android:versionCode="5"
+android:versionName="0.2.3"
+Date Started : 2015-09-19
+Date Released : 2015-09-20
+Changes :
+1. Bugfix : "miss" adds one to arrow count
+2. Joinable rounds ordered
+3. Bugfix : rounds joined correctly with new button
+
+
+android:versionCode="4"
+android:versionName="0.2.2"
+Date Started : 2015-08-16
+Date Released : 2015-09-18
+Changes :
+1. Implemented new "Join Round" button on main page
+2. Joined round appears immediately in main list
+3. Scoring page returns to current Arrow
+4. Removed "Connected to Cloud Archery Database" pop-up
+5. Implemented Connection Status Display
+6. Stopped Reconnection to database when App is not active on screen
+7. Fixed bug where names of other round competitors were not stored when offline
+8. Leaderboard ordered by best average score
+9. Fixed incorrect arrow count when overwriting scores
+10. Added Statistics screen showing total arrows, average etc.
+11. Removed already joined rounds from Joinable Rounds list

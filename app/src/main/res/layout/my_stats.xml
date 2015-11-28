@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:text="YOUR INFO"
+            android:id="@+id/mystats_heading_parameters"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:clickable="false"
+            android:textColor="@color/orange_1"
+            android:layout_marginTop="5dp" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:id="@+id/mystats_div_1"
+            android:background="@color/orange_1"
+            android:paddingLeft="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
+
+    </LinearLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Name :"
+                android:textSize="14dp"
+                android:id="@+id/mystats_textView_name" />
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Login :"
+                android:textSize="14dp"
+                android:id="@+id/mystats_textView_login" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Club : "
+                android:textSize="14dp"
+                android:id="@+id/mystats_textView_club" />
+        </TableRow>
+
+    </TableLayout>
+
+    <!-- - - - - -  My Statistics - - - - - - - - -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:text="YOUR STATISTICS"
+            android:id="@+id/mystats_heading_members"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:clickable="false"
+            android:textColor="@color/orange_1"
+            android:layout_marginTop="5dp" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:id="@+id/mystats_div_2"
+            android:background="@color/orange_1"
+            android:paddingLeft="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
+    </LinearLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp">
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Rounds Completed : "
+                android:textSize="14dp"
+                android:id="@+id/mystats_textview_totalrounds" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Arrows Scored : "
+                android:textSize="14dp"
+                android:id="@+id/mystats_textview_totalarrows" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Score : "
+                android:textSize="14dp"
+                android:id="@+id/mystats_textview_totalscore" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Average Arrow Score: "
+                android:textSize="14dp"
+                android:id="@+id/mystats_textview_average" />
+        </TableRow>
+
+    </TableLayout>
+
+
+</LinearLayout>

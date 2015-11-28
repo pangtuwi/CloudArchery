@@ -9,15 +9,16 @@
     /> -->
 
 
-    <item android:id="@+id/action_create_round"
-        android:icon="@drawable/ic_create_round"
-        android:title="@string/create_round"
-        android:showAsAction="ifRoom" />
+    <item android:id="@+id/round_menu_action_edit"
+        android:title="Edit Round"
+        android:showAsAction="collapseActionView" />
 
-    <item android:id="@+id/action_change_user"
-        android:icon="@drawable/ic_change_user"
-        android:title="@string/change_user"
-        android:showAsAction="ifRoom" />
+    <item android:id="@+id/round_menu_action_delete"
+        android:title="Delete Round"
+        android:showAsAction="collapseActionView" />
 
+    <item android:id="@+id/round_menu_action_merge"
+        android:title="Merge Round"
+        android:showAsAction="collapseActionView" />
 
 </menu>
