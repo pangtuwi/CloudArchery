@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
     <ScrollView
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/scrollView" >
 
@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:stretchColumns="*"
             android:textAlignment="inherit"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="10dp"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp">
 
@@ -128,10 +128,10 @@
 
                 <TableLayout
                     android:id="@+id/dynamic_scores_table"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:textSize="20dp">
+                    android:textSize="18dp">
                 </TableLayout>
 
             </TableRow>
@@ -192,18 +192,18 @@
                     android:id="@+id/round_scores_leaderboard_header_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
                     android:textSize="16dp"
-                    android:layout_marginLeft="260dp"
+                    android:layout_marginRight="65dp"
                     android:textStyle="bold"
                     android:text="Avg" />
                 <TextView
                     android:id="@+id/round_scores_leaderboard_header_4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
                     android:textSize="16dp"
-                    android:layout_marginLeft="200dp"
+                    android:layout_marginRight="105dp"
                     android:textStyle="bold"
                     android:text="Arws" />
 

@@ -149,7 +149,7 @@ public class RoundScores extends Fragment {
         
 
         //Initiate required variables
-        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 40, getResources().getDisplayMetrics());
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 36, getResources().getDisplayMetrics());
 
         headerText1 = (TextView) rootView.findViewById(R.id.round_scores_round_type_name);
         headerText1.setText(roundTypeName);
@@ -157,7 +157,7 @@ public class RoundScores extends Fragment {
         headerText2.setText(roundTypeDescription);
         headerText3 = (TextView) rootView.findViewById(R.id.round_scores_round_owner);
         //headerText3.setText("created by " +roundOwner + " on " + roundDate);
-        headerText3.setText("created on " + roundDate);
+        headerText3.setText("" + roundDate);
 
         //create scores table programatically
 

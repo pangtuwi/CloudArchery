@@ -3,6 +3,7 @@ android:versionName="0.2.5"
 Date Started : 2015-11-11
 Date Released  :
 Changes :
+1. Changed layout of Scores Sheet to stop RHS overlaps
 
 
 android:versionCode="6"
