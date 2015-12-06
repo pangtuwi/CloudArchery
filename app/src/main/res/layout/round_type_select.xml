@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Custom"
-            android:id="@+id/roundtypeselect_checkbox_custom"
+            android:id="@+id/roundtypeselect_checkbox_CUSTOM"
             android:checked="true" />
     </LinearLayout>
 

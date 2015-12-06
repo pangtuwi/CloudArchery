@@ -72,8 +72,6 @@ public class JSONAdapterRoundTypes extends BaseAdapter {
 
         // Get the data in JSON form
         JSONObject jsonObject = (JSONObject) getItem(position);
-        // Keeping above as not sure if need later
-        //holder.thumbnailImageView.setImageResource(R.drawable.ic_launcher);
 
         // Grab the title and author from the JSON
         String roundTypeName = "";

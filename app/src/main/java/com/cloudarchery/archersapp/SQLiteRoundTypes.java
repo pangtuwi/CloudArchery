@@ -11,7 +11,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Console;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -86,6 +92,82 @@ public class SQLiteRoundTypes  extends SQLiteOpenHelper {
         db.close();
         return myUnsortedJSONArray;
     }//getRoundTypesJSONArray
+
+    public JSONArray getFilteredRoundTypesJSONArray(boolean filterGNAS, boolean filterFITA, boolean filterCustom,
+                                                    boolean filterIndoor, boolean filterOutdoor) {
+        boolean isGNAS = true;
+        boolean isFITA = true;
+        boolean isCustom = true;
+        boolean isIndoor = true;
+
+        //Generates a Filtered JSON Array of rounds used to create the interface in RoundTypes
+        String query = "SELECT * FROM " + TABLE_NAME;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        JSONArray myUnsortedJSONArray = new JSONArray();
+        JSONArray mySortedJSONArray = new JSONArray();
+        if (cursor.moveToFirst()) {
+            do {
+                String detailJSONString = cursor.getString(1);
+                if (detailJSONString != null) try {
+                    JSONObject detailJSON = new JSONObject(detailJSONString);
+                    myUnsortedJSONArray.put(detailJSON);
+                } catch (Throwable t) {
+                    Log.e ("MCCArchers", "Could not make JSON Object from Sqlite String (SQLiteRoundTypes.getFilteredRoundTypesJSONArray");
+                    t.printStackTrace();
+                }
+            } while (cursor.moveToNext());
+        }
+
+        try {
+            Map <Integer, JSONObject> thisMap = new HashMap<Integer, JSONObject>();
+
+            for (int i = 0; i < myUnsortedJSONArray.length(); i++) {
+
+                JSONObject thisJSONObject = myUnsortedJSONArray.getJSONObject(i);
+                try {
+                    String classification = thisJSONObject.getString("classification");
+                    isGNAS = classification.equals("GNAS");
+                    isFITA = classification.equals("FITA");
+                    isCustom = classification.equals("CUSTOM");
+                    isIndoor = thisJSONObject.getBoolean("indoor");
+                } catch (Throwable t) {
+                    Log.e ("CloudArchery", "Could not get filter information from RoundType (SQLiteLocal.getRoundsJSONArray) ");
+                }
+                //JSONObject thisJSONObjectDetail = thisJSONObject.getJSONObject("detail");
+                int displayOrder = 0;
+                if (thisJSONObject.has("displayOrder")) displayOrder = thisJSONObject.getInt("displayOrder");
+                while (thisMap.containsKey(displayOrder)) {
+                    if (displayOrder < 1000) displayOrder = 1000;
+                    displayOrder +=1;
+                }
+                if (((filterGNAS && isGNAS) || (filterFITA && isFITA) || (filterCustom && isCustom)) &&
+                ((filterIndoor && isIndoor) || (filterOutdoor && !isIndoor))) {
+                    thisMap.put(displayOrder, thisJSONObject);
+                }
+                //Log.d("CloudArchery", "Found RoundType in internal DB  :" + thisJSONObject.getString("name"));
+            }
+            List<Map.Entry<Integer, JSONObject>> entries =
+                    new ArrayList<Map.Entry<Integer, JSONObject>>(thisMap.entrySet());
+            Collections.sort(entries, new Comparator<Map.Entry<Integer, JSONObject>>() {
+                public int compare(Map.Entry<Integer, JSONObject> a, Map.Entry<Integer, JSONObject> b) {
+                    return a.getKey().compareTo(b.getKey());
+                }
+            });
+
+            for (Map.Entry<Integer, JSONObject> entry : entries) {
+                mySortedJSONArray.put(entry.getValue());
+                //Log.d("CloudArchery", "Adding to List  :" + entry.getValue().getString("name"));
+            }
+        } catch (Throwable t){
+            Log.e ("CloudArchery", "Could not make JSON Object from JSON Array (SQLiteLocal.getRoundsJSONArray");
+            t.printStackTrace();
+        }
+
+
+        db.close();
+        return mySortedJSONArray;
+    }//getFilteredRoundTypesJSONArray
 
     public JSONObject getRoundTypeJSON (String roundTypeID){
         String roundTypeJSONString = "";

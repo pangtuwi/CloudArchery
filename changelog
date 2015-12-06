@@ -1,7 +1,16 @@
+
+android:versionCode="8"
+android:versionName="0.2.6"
+Date Started : 2015-11-27
+Date Released : 2015-12-06
+Changes :
+1. Added ordering to RoundTypes list (create new Round)
+2. Added filtering capability to RoundTypes list (create new Round)
+
 android:versionCode="7"
 android:versionName="0.2.5"
 Date Started : 2015-11-11
-Date Released  :
+Date Released  : 2015-11-27
 Changes :
 1. Changed layout of Scores Sheet to stop RHS overlaps
 
