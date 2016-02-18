@@ -180,7 +180,7 @@ public class MainActivity extends Activity {
             e.commit();
             //Set userID to new one
             myAppState.CDS.userID = id;
-            Log.d ("CloudArchery", "Created new user ID : "+ myAppState.CDS.userID);
+            //Log.d ("CloudArchery", "Created new user ID : "+ myAppState.CDS.userID);
 
             myAppState.CDS.startRoundTypeUpdate();
 

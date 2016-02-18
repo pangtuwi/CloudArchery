@@ -58,7 +58,7 @@ public class RoundsList extends Fragment implements AdapterView.OnItemClickListe
             @Override
             public void onRoundsListUpdated() {
                 loadRoundData();
-                Log.d ("CloudArchery", "loading round data to list");
+                //Log.d ("CloudArchery", "loading round data to list");
             }
         };
 
@@ -104,8 +104,17 @@ public class RoundsList extends Fragment implements AdapterView.OnItemClickListe
                     }
                 }
             });
+
+            rootView.findViewById(R.id.roundslist_sync).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    myAppState.CDS.sync();
+                    test this
+                }
+            });
         } else {
             rootView.findViewById(R.id.roundslist_joinround).setVisibility(View.INVISIBLE);
+            rootView.findViewById(R.id.roundslist_sync).setVisibility(View.INVISIBLE);
         }
         displayConnectionStatus(myAppState.CDS.syncOn, myAppState.CDS.network, myAppState.CDS.connected, myAppState.CDS.authenticated, myAppState.CDS.linked, myAppState.CDS.firebaseError);
         return rootView;

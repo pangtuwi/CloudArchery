@@ -60,6 +60,19 @@
         android:layout_gravity="bottom|right"
         android:drawSelectorOnTop="false" />
 
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/roundslist_sync"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        fab:fab_icon="@drawable/ic_sync"
+        fab:fab_colorNormal="@color/orange_2"
+        fab:fab_colorPressed="@color/orange_1"
+        android:layout_marginBottom="165dp"
+        android:layout_marginRight="12dp"
+        android:layout_gravity="bottom|right"
+        android:drawSelectorOnTop="false" />
+
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
