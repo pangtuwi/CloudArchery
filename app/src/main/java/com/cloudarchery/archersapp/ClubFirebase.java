@@ -66,6 +66,7 @@ public class ClubFirebase {
     //firebase Listeners
     ValueEventListener leaderBoardListener;
     ValueEventListener roundsListener;
+    ValueEventListener firebaseJoinableRoundListener;
 
     //Local App Listeners
     OnUserScoreUpdatedListener myScoreListener;
@@ -478,6 +479,7 @@ public class ClubFirebase {
     //ToDo : (RELEASE > 2) Create function that checks CDS/LDS JSON integrity and deals with issues found.
 
     public void sync() {
+        StopRoundChangeListener();
         syncError = false;
         //Synchronise Process
         // (1) - read CDS for all /users/:userid/rounds = CDS_RoundIndex
@@ -515,7 +517,6 @@ public class ClubFirebase {
                         //debugit.remove(); // avoids a ConcurrentModificationException
                     }
                     // END OF DEBUG CODE
-
 
 
 
@@ -587,6 +588,7 @@ public class ClubFirebase {
                                     // (7)    --> if timestamp LDS < timestamp CDS, download
                                     Log.d("CloudArchery","--- SYNC DOWN ---"+"ID="+CDSRoundID+"  |   LDStime = "+LDSUpdatedAt + "   |   CDStime = "+CDSUpdatedAt);
                                     copyRoundDownload(CDSRoundID);
+                                    myRoundsListListener.onRoundsListUpdated(); //
                                 } else {
                                     Log.d ("CloudArchery", "--- NO SYNC --- as LDSUpdatedAt = "+LDSUpdatedAt + " and CDSUpdatedAt = "+ CDSUpdatedAt);
                                 }
@@ -607,14 +609,25 @@ public class ClubFirebase {
                             Map.Entry pair = (Map.Entry) it1.next();
                             if ((Boolean) pair.getValue() == false) {
                                 // (10)   -> add items to CDS (upload)
-                                Log.d("CloudArchery", "Copying LDS round to CDS as marked not Synced (ClubFirebase.sync) : " + pair.getKey());
+                                //Log.d("CloudArchery", "Copying LDS round to CDS as marked not Synced (ClubFirebase.sync) : " + pair.getKey());
                                 copyRoundUpload((String) pair.getKey());
                             }
                             it1.remove(); // avoids a ConcurrentModificationException
                         }
                     }
 
-                    Log.d("CloudArchery", "got to the end of sync onDataChange");
+                    //give it a few seconds (5000ms) and then trigger interface update with callback liatener
+                    Runnable r = new Runnable() {
+                        @Override
+                        public void run(){
+                            myRoundsListListener.onRoundsListUpdated();
+                        }
+                    };
+                    Handler h = new Handler();
+                    h.postDelayed(r, 5000); //  5000 isdelay time in miliseconds.
+
+
+                   // Log.d("CloudArchery", "got to the end of sync onDataChange");
                 } //onDataChange
 
                 @Override
@@ -623,9 +636,8 @@ public class ClubFirebase {
             }); //AddlistenerforSingleValueEvent
 
 
-
          } //if SyncOn, Connected, Authenticated,
-        Log.d ("CloudArchery", "got to the end of Sync");
+        //Log.d ("CloudArchery", "got to the end of Sync");
 
         StartRoundChangeListener();
     } //sync
@@ -636,7 +648,12 @@ public class ClubFirebase {
             roundsListener = myClubFirebaseRef.child("users/" + userID + "/rounds/").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
-                /*    JSONArray usersJSONArray = new JSONArray();
+                /*
+                    Not sure what I was trying to do here, or why I commented it out.   Revisited this and decided
+                    to try sync() instead.
+                    sync() does not work - creates an infinite loop of updates (
+
+                    JSONArray usersJSONArray = new JSONArray();
                     if (snapshot.getValue() != null) {
                         Map<String, JSONObject> usersMap = (HashMap<String, JSONObject>) snapshot.getValue();
                         JSONObject usersJSON = new JSONObject(usersMap);
@@ -661,6 +678,7 @@ public class ClubFirebase {
                         }
 
                     } */
+                    //sync();
                 }///OnDataChange
 
                 @Override
@@ -1251,7 +1269,7 @@ public class ClubFirebase {
 
     public void startJoinableRoundListener () {
         if (syncOn && connected && authenticated && linked) {
-            myClubFirebaseRef.child("/rounds/").limitToLast(100).orderByChild("updatedAt").addValueEventListener(new ValueEventListener() {
+            firebaseJoinableRoundListener = myClubFirebaseRef.child("/rounds/").limitToLast(100).orderByChild("updatedAt").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
                     //System.out.println(snapshot.getValue());
@@ -1287,8 +1305,11 @@ public class ClubFirebase {
                             for (int i = 0; i < unsortedRoundsJSONArray.length(); i++) {
 
                                 JSONObject thisJSONObject = unsortedRoundsJSONArray.getJSONObject(i);
-                                if (thisJSONObject.has("updatedAt"))
+                                if (thisJSONObject.has("updatedAt")) {
                                     updatedAt = thisJSONObject.getLong("updatedAt");
+                                } else if ((thisJSONObject.has("createdAt"))) {
+                                    updatedAt = thisJSONObject.getLong("createdAt");
+                                }
                                 thisMap.put(updatedAt, thisJSONObject);
                             }
                             List<Map.Entry<Long, JSONObject>> entries =
@@ -1323,6 +1344,10 @@ public class ClubFirebase {
             });//new valueEventlistener
         }//if syncon.....
     } //startJoinablRoundListener
+
+    public void stopJoinableRoundListener(){
+        if ((myClubFirebaseRef != null) && (firebaseJoinableRoundListener != null)) myClubFirebaseRef.removeEventListener(firebaseJoinableRoundListener);
+    } //stopLeaderboardListener
 
   /*  public void updateClubStatistics(){
 

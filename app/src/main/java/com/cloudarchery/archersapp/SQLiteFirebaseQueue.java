@@ -62,17 +62,21 @@ public class SQLiteFirebaseQueue  extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ITEMS);
         this.onCreate(db);
+        db.close();
     } //deleteAllData
 
     public boolean queueisEmpty (){
+        boolean isEmpty = false;
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_ITEMS;
         Cursor cursor = db.rawQuery(query, null);
         if (cursor != null) {
-            return (cursor.getCount()==0);
+            isEmpty = (cursor.getCount()==0);
         } else {
-            return true;
+            isEmpty = true;
         }
+        db.close();
+        return isEmpty;
     }//queueHasItems
 
 
@@ -101,16 +105,17 @@ public class SQLiteFirebaseQueue  extends SQLiteOpenHelper {
                 myItem = itemJSON.toString();
             }
             //Log.d ("CloudArchery", "Found Item in FirebaseQueue : item no "+ cursor.getInt(0)+".  REF : "+cursor.getString(1)+", JSON: "+myItem);
+            db.close();
             return queueItem;
         }
         else {
+            db.close();
             return null;
         }
     } //getNextQueueItem
 
     public void enQueue (String newFirebaseRef, JSONObject newJSONItem){
         SQLiteDatabase db = this.getWritableDatabase();
-
 
         ContentValues values = new ContentValues();
         values.put(KEY_REF, newFirebaseRef);

@@ -2,6 +2,7 @@ package com.cloudarchery.archersapp;
 
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ public class JoinRound extends Fragment implements AdapterView.OnItemClickListen
         roundListView.setOnItemClickListener(this);
         JSONAdapterJRL = new JSONAdapterJoinRoundList(getActivity(), getActivity().getLayoutInflater());
         roundListView.setAdapter(JSONAdapterJRL);
+
         myAppState.CDS.myJoinableRoundListener = new ClubFirebase.OnJoinableRoundChangedListener() {
             @Override
             public void onJoinableRoundChanged(JSONArray joinableRoundJSONArray) {
@@ -47,10 +49,30 @@ public class JoinRound extends Fragment implements AdapterView.OnItemClickListen
                 }
             }
         };
+
+        if (myAppState.CDS.syncOn) {
+            rootView.findViewById(R.id.joinround_refresh).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    myAppState.CDS.stopJoinableRoundListener();
+                    JSONArray emptyJSONArray = new JSONArray();
+                    JSONAdapterJRL.updateData(emptyJSONArray);
+                    warningTextView.setVisibility(View.VISIBLE);
+                    roundListView.setAdapter(JSONAdapterJRL);
+                    myAppState.CDS.startJoinableRoundListener();
+                }
+            });
+        }
         myAppState.CDS.startJoinableRoundListener();
 
         return rootView;
     }
+
+    @Override
+    public void onDestroyView (){
+        super.onDestroyView();
+        myAppState.CDS.stopJoinableRoundListener();
+    } //onDestroyView
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

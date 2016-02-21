@@ -96,7 +96,6 @@ public class RoundsList extends Fragment implements AdapterView.OnItemClickListe
                     Fragment fragment = new JoinRound();
                     if (fragment != null) {
                         FragmentManager fragmentManager = getFragmentManager();
-                        //fragment.setArguments(args);
                         fragmentManager.beginTransaction()
                                 .replace(R.id.frame_container, fragment)
                                 .addToBackStack("")
@@ -108,8 +107,8 @@ public class RoundsList extends Fragment implements AdapterView.OnItemClickListe
             rootView.findViewById(R.id.roundslist_sync).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.d ("CloudArchery", "Sync Triggered on button (RoundsList)");
                     myAppState.CDS.sync();
-                    test this
                 }
             });
         } else {

@@ -3,7 +3,11 @@ android:versionName="0.2.7"
 Date Started : 2016-01-18
 Date Released :
 Changes :
-1.
+1. Added refresh button to Join Cloud Round Page
+2. Added Autowatch function to check for new rounds to join.
+3. Fixed ordering of rounds in Join Cloud Round List
+4. Fixed memory issue with non closed queue database
+5. Added update button to main page with rounds list
 
 
 android:versionCode="8"
